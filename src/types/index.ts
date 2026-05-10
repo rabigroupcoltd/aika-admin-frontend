@@ -1,8 +1,11 @@
 export interface User {
   id: string;
   email: string;
+  phoneNumber?: string;
   profile?: {
     name: string;
+    phone?: string;
+    avatar?: string;
   };
   status: string;
   driverStatus: string;
@@ -11,6 +14,7 @@ export interface User {
     url: string;
   }>;
 }
+
 
 export interface DashboardStats {
   totalUsers: number;
@@ -120,4 +124,23 @@ export interface KycApprovalRequest {
 export interface KycApprovalResponse {
   success: boolean;
   user: User;
+}
+
+export interface PaginatedResponse<T> {
+  result: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  limit: number;
+}
+
+export interface QueryParams {
+  page?: number;
+  size?: number;
+  search?: string;
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
+  role?: string;
+  status?: string;
+  driverStatus?: string;
 }

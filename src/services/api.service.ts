@@ -12,6 +12,8 @@ import type {
   Order,
   Rider,
   Transaction,
+  QueryParams,
+  PaginatedResponse,
 } from '../types';
 
 class ApiService {
@@ -25,10 +27,10 @@ class ApiService {
     return data.data;
   }
 
-
-  async getUsers(): Promise<User[]> {
-    const { data } = await apiClient.get<{ data: User[] }>('/user');
-    return data.data;
+  async getUsers(params?: QueryParams): Promise<PaginatedResponse<User>> {
+    const { data } = await apiClient.get<{ body: PaginatedResponse<User> }>('/user', { params });
+    // Note: The backend structure for /user might return data in 'body' based on user.service logic
+    return data.body;
   }
 
   async getUser(id: string): Promise<User> {
@@ -36,27 +38,27 @@ class ApiService {
     return data.data;
   }
 
-  async getPendingKyc(): Promise<User[]> {
-    const { data } = await apiClient.get<{ data: User[] }>('/user?driverStatus=PENDING');
-    return data.data;
+  async getPendingKyc(): Promise<PaginatedResponse<User>> {
+    const { data } = await apiClient.get<{ body: PaginatedResponse<User> }>('/user', { 
+        params: { driverStatus: 'PENDING', size: 100 } 
+    });
+    return data.body;
   }
 
-  async getOrders(): Promise<Order[]> {
-    const { data } = await apiClient.get<{ data: Order[] }>('/order');
-    return data.data;
+  async getOrders(params?: QueryParams): Promise<PaginatedResponse<Order>> {
+    const { data } = await apiClient.get<{ body: PaginatedResponse<Order> }>('/order', { params });
+    return data.body;
   }
 
-  async getRiders(): Promise<Rider[]> {
-    const { data } = await apiClient.get<{ data: Rider[] }>('/rider');
-    return data.data;
+  async getRiders(params?: QueryParams): Promise<PaginatedResponse<Rider>> {
+    const { data } = await apiClient.get<{ body: PaginatedResponse<Rider> }>('/rider', { params });
+    return data.body;
   }
 
-  async getTransactions(): Promise<Transaction[]> {
-    const { data } = await apiClient.get<{ data: Transaction[] }>('/payments');
-    return data.data;
+  async getTransactions(params?: QueryParams): Promise<PaginatedResponse<Transaction>> {
+    const { data } = await apiClient.get<{ body: PaginatedResponse<Transaction> }>('/payments', { params });
+    return data.body;
   }
-
-
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     const { data } = await apiClient.post<{ data: LoginResponse }>('/auth/signin', credentials);
@@ -64,7 +66,12 @@ class ApiService {
   }
 
   async logout(): Promise<void> {
-    await apiClient.post('/auth/logout');
+    // Some backends use POST /auth/logout, others might just clear tokens on frontend
+    try {
+      await apiClient.post('/auth/logout');
+    } catch (e) {
+      console.warn('Logout API failed, continuing with local cleanup', e);
+    }
   }
 
   async approveDriver(request: KycApprovalRequest): Promise<KycApprovalResponse> {
@@ -83,7 +90,6 @@ class ApiService {
     const { data } = await apiClient.get<{ data: any }>('/payouts/summary');
     return data.data;
   }
-
 
   // Wallet management
   async getUserWallet(userId: string): Promise<WalletInfo> {

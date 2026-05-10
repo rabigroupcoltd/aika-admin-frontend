@@ -117,3 +117,53 @@ export const Table: React.FC<TableProps> = ({ headers, children }) => {
     </div>
   );
 };
+
+export const Badge: React.FC<{ children: React.ReactNode; variant?: 'success' | 'warning' | 'error' | 'neutral' }> = ({ children, variant = 'neutral' }) => {
+  const variants = {
+    success: 'bg-primary/10 text-primary border-primary/20',
+    warning: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+    error: 'bg-destructive/10 text-destructive border-destructive/20',
+    neutral: 'bg-muted text-muted-foreground border-border',
+  };
+
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${variants[variant]}`}>
+      {children}
+    </span>
+  );
+};
+
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  return (
+    <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+      <p className="text-sm text-muted-foreground font-medium">
+        Page <span className="text-foreground">{currentPage}</span> of <span className="text-foreground">{totalPages}</span>
+      </p>
+      <div className="flex space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={currentPage === 1}
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={currentPage === totalPages}
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+};
+

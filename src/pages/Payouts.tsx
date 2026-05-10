@@ -9,58 +9,58 @@ const Payouts = () => {
   if (isSummaryLoading) return <LoadingSpinner />;
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-6 md:space-y-8 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Process Payouts</h1>
-        <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">
+        <h1 className="text-3xl md:text-4xl font-black text-foreground tracking-tight">Process Payouts</h1>
+        <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">
           Calculate and distribute payments to approved drivers
         </p>
       </div>
 
       {/* Info Cards - Mobile Responsive */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-        <Card className="p-4 md:p-6 border-l-4 border-l-aiko-green-500">
-          <div className="flex items-start space-x-3 md:space-x-4">
-            <div className="p-2 md:p-3 bg-aiko-green-100 dark:bg-aiko-green-900 rounded-lg">
-              <CreditCard className="w-5 h-5 md:w-6 md:h-6 text-aiko-green-500" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <Card className="p-6 border-l-4 border-l-primary bg-card/50 backdrop-blur-sm">
+          <div className="flex items-start space-x-4">
+            <div className="p-3 bg-primary/10 rounded-2xl text-primary border border-primary/20">
+              <CreditCard className="w-6 h-6" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm md:text-base font-semibold text-aiko-dark-900 dark:text-white">
+              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                 Pending Payouts
               </h3>
-              <p className="text-xl md:text-2xl font-bold text-aiko-green-600 dark:text-aiko-green-400 mt-1">
+              <p className="text-2xl md:text-3xl font-black text-foreground mt-1">
                 {summary?.pendingPayouts || 0}
               </p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4 md:p-6 border-l-4 border-l-green-500">
-          <div className="flex items-start space-x-3 md:space-x-4">
-            <div className="p-2 md:p-3 bg-green-100 dark:bg-green-900 rounded-lg">
-              <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
+        <Card className="p-6 border-l-4 border-l-primary bg-card/50 backdrop-blur-sm">
+          <div className="flex items-start space-x-4">
+            <div className="p-3 bg-primary/10 rounded-2xl text-primary border border-primary/20">
+              <CheckCircle className="w-6 h-6" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                 Processed Today
               </h3>
-              <p className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400 mt-1">
+              <p className="text-2xl md:text-3xl font-black text-foreground mt-1">
                 {summary?.processedCount || 0}
               </p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4 md:p-6 border-l-4 border-l-red-500 sm:col-span-2 lg:col-span-1">
-          <div className="flex items-start space-x-3 md:space-x-4">
-            <div className="p-2 md:p-3 bg-red-100 dark:bg-red-900 rounded-lg">
-              <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-red-600" />
+        <Card className="p-6 border-l-4 border-l-destructive bg-card/50 backdrop-blur-sm sm:col-span-2 lg:col-span-1">
+          <div className="flex items-start space-x-4">
+            <div className="p-3 bg-destructive/10 rounded-2xl text-destructive border border-destructive/20">
+              <AlertTriangle className="w-6 h-6" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm md:text-base font-semibold text-aiko-dark-900 dark:text-white">
+              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                 Failed
               </h3>
-              <p className="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 mt-1">
+              <p className="text-2xl md:text-3xl font-black text-foreground mt-1">
                 {summary?.failedCount || 0}
               </p>
             </div>
@@ -69,38 +69,38 @@ const Payouts = () => {
       </div>
 
       {/* Main Action Card */}
-      <Card className="p-4 md:p-8">
-        <div className="max-w-2xl">
+      <Card className="p-6 md:p-10 border-none shadow-2xl bg-card/80 backdrop-blur-xl">
+        <div className="max-w-2xl mx-auto">
           {/* Warning Alert */}
-          <div className="flex items-start space-x-3 md:space-x-4 mb-4 md:mb-6 p-3 md:p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg border border-yellow-200 dark:border-yellow-700/50">
-            <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start space-x-4 mb-8 p-5 bg-yellow-500/10 rounded-3xl border border-yellow-500/20">
+            <AlertCircle className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-0.5" />
             <div className="min-w-0">
-              <h3 className="font-semibold text-yellow-900 dark:text-yellow-100 text-sm md:text-base">
+              <h3 className="font-bold text-yellow-500 text-base md:text-lg">
                 Important Notice
               </h3>
-              <p className="text-xs md:text-sm text-yellow-800 dark:text-yellow-200 mt-1">
+              <p className="text-sm text-yellow-500/80 mt-1 font-medium leading-relaxed">
                 This action will calculate net balances and initiate payouts for all approved drivers. This process
-                cannot be undone and involves real financial transfers via Paystack.
+                cannot be undone and involves real financial transfers.
               </p>
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 p-3 md:p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
-              <div>
-                <label className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Total Amount to Process
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6 bg-muted/50 rounded-3xl border border-border">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                  Total Amount
                 </label>
-                <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                <p className="text-2xl md:text-3xl font-black text-foreground">
                   ₦{(summary?.totalAmount || 0).toLocaleString()}
                 </p>
               </div>
-              <div>
-                <label className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Number of Drivers
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                  Eligible Drivers
                 </label>
-                <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                <p className="text-2xl md:text-3xl font-black text-foreground">
                   {summary?.pendingPayouts || 0}
                 </p>
               </div>
@@ -108,18 +108,18 @@ const Payouts = () => {
 
             {/* Error Alert */}
             {payoutMutation.isError && (
-              <div className="p-3 md:p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg">
-                <p className="text-red-800 dark:text-red-200 text-xs md:text-sm font-medium">
-                  Error processing payouts: {payoutMutation.error?.message || 'Please try again.'}
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-2xl animate-in shake-1">
+                <p className="text-destructive text-sm font-bold">
+                  Error: {payoutMutation.error?.message || 'Transaction failed. Please try again.'}
                 </p>
               </div>
             )}
 
             {/* Success Alert */}
             {payoutMutation.isSuccess && (
-              <div className="p-3 md:p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg">
-                <p className="text-green-800 dark:text-green-200 text-xs md:text-sm font-medium">
-                  Payouts processed successfully! {payoutMutation.data?.processedCount} drivers paid.
+              <div className="p-4 bg-primary/10 border border-primary/20 rounded-2xl animate-in zoom-in-95">
+                <p className="text-primary text-sm font-bold">
+                  Payouts completed! {payoutMutation.data?.processedCount} drivers successfully paid.
                 </p>
               </div>
             )}
@@ -130,14 +130,14 @@ const Payouts = () => {
               disabled={payoutMutation.isPending || !summary?.pendingPayouts}
               variant="primary"
               size="lg"
-              className="w-full text-sm md:text-base h-12 flex items-center justify-center"
+              className="w-full h-16 rounded-3xl text-xl font-black shadow-xl shadow-primary/20 transition-all transform hover:scale-[1.01] active:scale-[0.99]"
             >
               {payoutMutation.isPending ? (
                 <span className="flex items-center">
-                  <LoadingSpinner /> Processing Payouts...
+                  <LoadingSpinner /> Processing Transfers...
                 </span>
               ) : (
-                'Process Payouts'
+                'Execute Batch Payout'
               )}
             </Button>
           </div>

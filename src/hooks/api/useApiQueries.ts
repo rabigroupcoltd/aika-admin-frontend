@@ -3,17 +3,18 @@ import { apiService } from '../../services/api.service';
 import type {
   LoginRequest,
   KycApprovalRequest,
+  QueryParams,
 } from '../../types';
 
 export const queryKeys = {
   all: ['api'] as const,
   dashboard: () => [...queryKeys.all, 'dashboard'] as const,
   dashboardAnalytics: () => [...queryKeys.all, 'dashboard-analytics'] as const,
-  users: () => [...queryKeys.all, 'users'] as const,
+  users: (params?: QueryParams) => [...queryKeys.all, 'users', params] as const,
   user: (id: string) => [...queryKeys.all, 'user', id] as const,
-  riders: () => [...queryKeys.all, 'riders'] as const,
-  orders: () => [...queryKeys.all, 'orders'] as const,
-  transactions: () => [...queryKeys.all, 'transactions'] as const,
+  riders: (params?: QueryParams) => [...queryKeys.all, 'riders', params] as const,
+  orders: (params?: QueryParams) => [...queryKeys.all, 'orders', params] as const,
+  transactions: (params?: QueryParams) => [...queryKeys.all, 'transactions', params] as const,
   pendingKyc: () => [...queryKeys.all, 'pending-kyc'] as const,
 
   payouts: () => [...queryKeys.all, 'payouts'] as const,
@@ -42,10 +43,10 @@ export const useDashboardAnalyticsQuery = () => {
 };
 
 
-export const useUsersQuery = () => {
+export const useUsersQuery = (params?: QueryParams) => {
   return useQuery({
-    queryKey: queryKeys.users(),
-    queryFn: () => apiService.getUsers(),
+    queryKey: queryKeys.users(params),
+    queryFn: () => apiService.getUsers(params),
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
@@ -60,28 +61,28 @@ export const usePendingKycQuery = () => {
   });
 };
 
-export const useOrdersQuery = () => {
+export const useOrdersQuery = (params?: QueryParams) => {
   return useQuery({
-    queryKey: queryKeys.orders(),
-    queryFn: () => apiService.getOrders(),
+    queryKey: queryKeys.orders(params),
+    queryFn: () => apiService.getOrders(params),
     staleTime: 1000 * 60 * 2,
     retry: 1,
   });
 };
 
-export const useRidersQuery = () => {
+export const useRidersQuery = (params?: QueryParams) => {
   return useQuery({
-    queryKey: queryKeys.riders(),
-    queryFn: () => apiService.getRiders(),
+    queryKey: queryKeys.riders(params),
+    queryFn: () => apiService.getRiders(params),
     staleTime: 1000 * 60 * 2,
     retry: 1,
   });
 };
 
-export const useTransactionsQuery = () => {
+export const useTransactionsQuery = (params?: QueryParams) => {
   return useQuery({
-    queryKey: queryKeys.transactions(),
-    queryFn: () => apiService.getTransactions(),
+    queryKey: queryKeys.transactions(params),
+    queryFn: () => apiService.getTransactions(params),
     staleTime: 1000 * 60 * 2,
     retry: 1,
   });

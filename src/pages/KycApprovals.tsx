@@ -14,79 +14,93 @@ const KycApprovals = () => {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-6 md:space-y-8 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">KYC Approvals</h1>
-        <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">
-          Review and approve driver KYC documents
+        <h1 className="text-3xl md:text-4xl font-black text-foreground tracking-tight">KYC Approvals</h1>
+        <p className="text-sm md:text-base text-muted-foreground mt-2 font-medium">
+          Review and approve driver identification and vehicle documents
         </p>
       </div>
 
       {users.length === 0 ? (
-        <Card className="p-6 md:p-8">
+        <Card className="p-12 md:p-20 bg-card/50 backdrop-blur-sm border-dashed border-2">
           <div className="flex flex-col items-center justify-center text-center">
-            <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">All Caught Up!</h3>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">No pending KYC approvals at this moment.</p>
+            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+              <CheckCircle className="w-10 h-10 text-primary" />
+            </div>
+            <h3 className="text-2xl font-black text-foreground tracking-tight">All Caught Up!</h3>
+            <p className="text-muted-foreground mt-2 max-w-xs mx-auto">No pending KYC approvals at this moment. Everything is up to date.</p>
           </div>
         </Card>
       ) : (
-        <div className="space-y-3 md:space-y-4">
+        <div className="space-y-4 md:space-y-6">
           {users.map((user: User) => (
-            <Card key={user.id} className="p-4 md:p-6 hover:shadow-lg transition-shadow">
-              <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+            <Card key={user.id} className="p-6 md:p-8 hover:shadow-2xl transition-all duration-500 bg-card/50 backdrop-blur-sm border-border group">
+              <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
                 {/* User Info */}
-                <div className="col-span-1">
-                  <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
-                    {user.profile?.name || 'Unknown'}
-                  </h3>
-                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 truncate">
-                    {user.email}
-                  </p>
-                  <div className="mt-3 md:mt-4">
-                    <span className="inline-block px-3 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs font-semibold rounded-full">
-                      <AlertCircle className="inline w-3 h-3 mr-1" />
-                      Pending Review
-                    </span>
+                <div className="md:col-span-4 border-b md:border-b-0 md:border-r border-border pb-6 md:pb-0 md:pr-8">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-inner">
+                        <span className="text-primary font-black text-lg">
+                            {(user.profile?.name || user.email)?.[0]?.toUpperCase() ?? '?'}
+                        </span>
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                            {user.profile?.name || 'Unknown User'}
+                        </h3>
+                        <p className="text-sm text-muted-foreground font-medium truncate max-w-[200px]">
+                            {user.email}
+                        </p>
+                    </div>
+                  </div>
+                  
+                  <div className="inline-flex items-center px-4 py-2 bg-yellow-500/10 text-yellow-600 dark:text-yellow-500 text-xs font-black uppercase tracking-widest rounded-2xl border border-yellow-500/20">
+                    <AlertCircle className="w-3.5 h-3.5 mr-2 animate-pulse" />
+                    Awaiting Review
                   </div>
                 </div>
 
                 {/* Documents */}
-                <div className="col-span-1">
-                  <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 md:mb-3 flex items-center">
-                    <FileText className="w-4 h-4 mr-2 text-aiko-green-500" />
-                    Documents
+                <div className="md:col-span-5 space-y-4">
+                  <h4 className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center">
+                    <FileText className="w-4 h-4 mr-2 text-primary" />
+                    Verification Assets
                   </h4>
-                  <div className="space-y-1 md:space-y-2">
-{user.kycDocuments?.length ? (
-                       user.kycDocuments.map((doc: { type: string; url: string }, index: number) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {user.kycDocuments?.length ? (
+                      user.kycDocuments.map((doc: { type: string; url: string }, index: number) => (
                         <a
                           key={index}
                           href={doc.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-aiko-green-500 hover:text-aiko-green-600 dark:hover:text-aiko-green-400 text-xs md:text-sm font-medium break-all"
+                          className="flex items-center justify-between p-3 bg-muted/50 rounded-xl border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group/doc"
                         >
-                          {doc.type}
-                          <ExternalLink className="w-3 h-3 ml-2 flex-shrink-0" />
+                          <span className="text-xs font-bold text-foreground/80 truncate pr-2">{doc.type}</span>
+                          <ExternalLink className="w-4 h-4 text-muted-foreground group-hover/doc:text-primary" />
                         </a>
                       ))
                     ) : (
-                      <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">No documents uploaded</p>
+                      <p className="text-sm text-muted-foreground italic font-medium">No documents uploaded yet</p>
                     )}
                   </div>
                 </div>
 
                 {/* Action */}
-                <div className="flex items-end col-span-1 md:col-span-1">
+                <div className="md:col-span-3">
                   <Button
                     onClick={() =>
                       approveMutation.mutate({ userId: user.id, deviceToken: 'admin_approval' })
                     }
                     disabled={approveMutation.isPending}
-                    className="w-full text-xs md:text-base py-2 md:py-3"
+                    className="w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20"
                   >
-                    {approveMutation.isPending ? 'Approving...' : 'Approve Driver'}
+                    {approveMutation.isPending ? (
+                         <span className="flex items-center">
+                            <LoadingSpinner /> Validating...
+                        </span>
+                    ) : 'Approve Rider'}
                   </Button>
                 </div>
               </div>
