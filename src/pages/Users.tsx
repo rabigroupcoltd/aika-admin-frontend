@@ -1,19 +1,17 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { 
   Mail, 
   Search, 
-  Filter, 
   UserPlus, 
   MoreVertical, 
   Phone, 
-  ShieldCheck, 
-  ShieldAlert,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
 import { useUsersQuery } from '../hooks/useApiQueries';
 import { Card, Table, LoadingSpinner, EmptyState, Button, Badge } from '../components/ui';
 import type { User, QueryParams } from '../types';
+
 
 const Users = () => {
   const [activeTab, setActiveTab] = useState<'CUSTOMER' | 'RIDER'>('CUSTOMER');

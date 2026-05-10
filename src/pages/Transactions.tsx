@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Search, ArrowUpRight, ArrowDownLeft, ReceiptText, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTransactionsQuery } from '../hooks/useApiQueries';
-import { Table, LoadingSpinner, EmptyState, Card } from '../components/ui';
+import { Table, LoadingSpinner, Card } from '../components/ui';
 import type { QueryParams, Transaction } from '../types';
 
 const Transactions = () => {

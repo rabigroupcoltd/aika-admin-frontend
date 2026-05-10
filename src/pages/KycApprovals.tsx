@@ -9,7 +9,7 @@ const KycApprovals = () => {
 
   if (isLoading) return <LoadingSpinner />;
 
-  const users = data?.result || [];
+  const users: User[] = data?.result || [];
 
   if (isError) {
     return <EmptyState message="Failed to load KYC requests" />;
