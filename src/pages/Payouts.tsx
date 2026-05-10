@@ -1,9 +1,12 @@
 import { AlertCircle, CheckCircle, AlertTriangle, CreditCard } from 'lucide-react';
-import { useProcessPayoutsMutation } from '../hooks/useApiQueries';
-import { Card, Button } from '../components/ui';
+import { useProcessPayoutsMutation, usePayoutSummaryQuery } from '../hooks/useApiQueries';
+import { Card, Button, LoadingSpinner } from '../components/ui';
 
 const Payouts = () => {
+  const { data: summary, isLoading: isSummaryLoading } = usePayoutSummaryQuery();
   const payoutMutation = useProcessPayoutsMutation();
+
+  if (isSummaryLoading) return <LoadingSpinner />;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -26,7 +29,7 @@ const Payouts = () => {
                 Pending Payouts
               </h3>
               <p className="text-xl md:text-2xl font-bold text-aiko-green-600 dark:text-aiko-green-400 mt-1">
-                0
+                {summary?.pendingPayouts || 0}
               </p>
             </div>
           </div>
@@ -39,14 +42,16 @@ const Payouts = () => {
             </div>
             <div className="min-w-0">
               <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">
-                Processed
+                Processed Today
               </h3>
-              <p className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400 mt-1">0</p>
+              <p className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400 mt-1">
+                {summary?.processedCount || 0}
+              </p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4 md:p-6 border-l-4 border-l-aiko-green-500 sm:col-span-2 lg:col-span-1">
+        <Card className="p-4 md:p-6 border-l-4 border-l-red-500 sm:col-span-2 lg:col-span-1">
           <div className="flex items-start space-x-3 md:space-x-4">
             <div className="p-2 md:p-3 bg-red-100 dark:bg-red-900 rounded-lg">
               <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-red-600" />
@@ -55,7 +60,9 @@ const Payouts = () => {
               <h3 className="text-sm md:text-base font-semibold text-aiko-dark-900 dark:text-white">
                 Failed
               </h3>
-              <p className="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 mt-1">0</p>
+              <p className="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 mt-1">
+                {summary?.failedCount || 0}
+              </p>
             </div>
           </div>
         </Card>
@@ -65,7 +72,7 @@ const Payouts = () => {
       <Card className="p-4 md:p-8">
         <div className="max-w-2xl">
           {/* Warning Alert */}
-          <div className="flex items-start space-x-3 md:space-x-4 mb-4 md:mb-6 p-3 md:p-4 bg-yellow-50 dark:bg-yellow-900 rounded-lg border border-yellow-200 dark:border-yellow-700">
+          <div className="flex items-start space-x-3 md:space-x-4 mb-4 md:mb-6 p-3 md:p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg border border-yellow-200 dark:border-yellow-700/50">
             <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
             <div className="min-w-0">
               <h3 className="font-semibold text-yellow-900 dark:text-yellow-100 text-sm md:text-base">
@@ -73,44 +80,46 @@ const Payouts = () => {
               </h3>
               <p className="text-xs md:text-sm text-yellow-800 dark:text-yellow-200 mt-1">
                 This action will calculate net balances and initiate payouts for all approved drivers. This process
-                cannot be undone.
+                cannot be undone and involves real financial transfers via Paystack.
               </p>
             </div>
           </div>
 
           <div className="space-y-4">
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 p-3 md:p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 p-3 md:p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
               <div>
                 <label className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
                   Total Amount to Process
                 </label>
                 <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-2">
-                  ₦0.00
+                  ₦{(summary?.totalAmount || 0).toLocaleString()}
                 </p>
               </div>
               <div>
                 <label className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
                   Number of Drivers
                 </label>
-                <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-2">0</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                  {summary?.pendingPayouts || 0}
+                </p>
               </div>
             </div>
 
             {/* Error Alert */}
             {payoutMutation.isError && (
-              <div className="p-3 md:p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg">
+              <div className="p-3 md:p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg">
                 <p className="text-red-800 dark:text-red-200 text-xs md:text-sm font-medium">
-                  Error processing payouts. Please try again.
+                  Error processing payouts: {payoutMutation.error?.message || 'Please try again.'}
                 </p>
               </div>
             )}
 
             {/* Success Alert */}
             {payoutMutation.isSuccess && (
-              <div className="p-3 md:p-4 bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg">
+              <div className="p-3 md:p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg">
                 <p className="text-green-800 dark:text-green-200 text-xs md:text-sm font-medium">
-                  Payouts processed successfully!
+                  Payouts processed successfully! {payoutMutation.data?.processedCount} drivers paid.
                 </p>
               </div>
             )}
@@ -118,12 +127,18 @@ const Payouts = () => {
             {/* Submit Button */}
             <Button
               onClick={() => payoutMutation.mutate()}
-              disabled={payoutMutation.isPending}
+              disabled={payoutMutation.isPending || !summary?.pendingPayouts}
               variant="primary"
               size="lg"
-              className="w-full text-sm md:text-base"
+              className="w-full text-sm md:text-base h-12 flex items-center justify-center"
             >
-              {payoutMutation.isPending ? 'Processing Payouts...' : 'Process Payouts'}
+              {payoutMutation.isPending ? (
+                <span className="flex items-center">
+                  <LoadingSpinner /> Processing Payouts...
+                </span>
+              ) : (
+                'Process Payouts'
+              )}
             </Button>
           </div>
         </div>

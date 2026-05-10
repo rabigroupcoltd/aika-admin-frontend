@@ -16,6 +16,12 @@ class ApiService {
     return data.data;
   }
 
+  async getDashboardAnalytics(): Promise<DashboardAnalytics> {
+    const { data } = await apiClient.get<{ data: DashboardAnalytics }>('/dashboard/analytics');
+    return data.data;
+  }
+
+
   async getUsers(): Promise<User[]> {
     const { data } = await apiClient.get<{ data: User[] }>('/user');
     return data.data;
@@ -30,6 +36,23 @@ class ApiService {
     const { data } = await apiClient.get<{ data: User[] }>('/user?driverStatus=PENDING');
     return data.data;
   }
+
+  async getOrders(): Promise<Order[]> {
+    const { data } = await apiClient.get<{ data: Order[] }>('/order');
+    return data.data;
+  }
+
+  async getRiders(): Promise<Rider[]> {
+    const { data } = await apiClient.get<{ data: Rider[] }>('/rider');
+    return data.data;
+  }
+
+  async getTransactions(): Promise<Transaction[]> {
+    const { data } = await apiClient.get<{ data: Transaction[] }>('/payments');
+    return data.data;
+  }
+
+
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     const { data } = await apiClient.post<{ data: LoginResponse }>('/auth/signin', credentials);
@@ -51,6 +74,12 @@ class ApiService {
     const { data } = await apiClient.post<PayoutProcessResponse>('/payouts/process');
     return data;
   }
+
+  async getPayoutSummary(): Promise<{ pendingPayouts: number; totalAmount: number; processedCount: number; failedCount: number }> {
+    const { data } = await apiClient.get<{ data: any }>('/payouts/summary');
+    return data.data;
+  }
+
 
   // Wallet management
   async getUserWallet(userId: string): Promise<WalletInfo> {

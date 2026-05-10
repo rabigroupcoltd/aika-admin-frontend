@@ -22,6 +22,61 @@ export interface DashboardStats {
   conversionRate: string;
 }
 
+export interface DashboardAnalytics {
+  monthlyTransactions: Array<{
+    month: string;
+    total: number;
+  }>;
+}
+
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  status: 'PENDING' | 'ACCEPTED' | 'PICKED_UP' | 'DELIVERED' | 'CANCELLED';
+  totalAmount: number;
+  customerId: string;
+  riderId?: string;
+  customer?: {
+    profile?: { name: string };
+  };
+  rider?: {
+    profile?: { name: string };
+  };
+  createdAt: string;
+}
+
+export interface Rider {
+  id: string;
+  email: string;
+  status: string;
+  driverStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
+  profile?: {
+    name: string;
+    phone: string;
+    avatar?: string;
+  };
+  vehicle?: {
+    type: string;
+    plateNumber: string;
+  };
+}
+
+export interface Transaction {
+  id: string;
+  amount: number;
+  type: 'CREDIT' | 'DEBIT';
+  status: string;
+  transactionRef: string;
+  description?: string;
+  createdAt: string;
+  userId: string;
+  user?: {
+    profile?: { name: string };
+    email: string;
+  };
+}
+
 export interface LoginRequest {
   username: string;
   password: string;

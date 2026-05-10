@@ -5,10 +5,14 @@ import { usePushNotifications } from './hooks/usePushNotifications';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
+import Riders from './pages/Riders';
+import Orders from './pages/Orders';
+import Transactions from './pages/Transactions';
 import KycApprovals from './pages/KycApprovals';
 import Payouts from './pages/Payouts';
 import Wallets from './pages/Wallets';
 import Layout from './components/Layout';
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,9 +56,13 @@ function AppContent() {
         >
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
+          <Route path="riders" element={<Riders />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="transactions" element={<Transactions />} />
           <Route path="kyc" element={<KycApprovals />} />
           <Route path="payouts" element={<Payouts />} />
           <Route path="wallets" element={<Wallets />} />
+
         </Route>
       </Routes>
     </Router>
