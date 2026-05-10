@@ -1,17 +1,18 @@
 // Firebase Cloud Messaging Service Worker
 // Handles push notifications even when app is closed
 
-importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js');
 
+// These will be replaced by Vite during build or should be configured via public/env.js if needed
+// For now, using placeholders that the user should fill or we can try to inject
 const firebaseConfig = {
-  apiKey: "VITE_FIREBASE_API_KEY",
-  authDomain: "VITE_FIREBASE_AUTH_DOMAIN",
-  projectId: "VITE_FIREBASE_PROJECT_ID",
-  storageBucket: "VITE_FIREBASE_STORAGE_BUCKET",
-  messagingSenderId: "VITE_FIREBASE_MESSAGING_SENDER_ID",
-  appId: "VITE_FIREBASE_APP_ID",
-  measurementId: "VITE_FIREBASE_MEASUREMENT_ID",
+  apiKey: "AIzaSyB...", // Needs actual values
+  authDomain: "aika-app.firebaseapp.com",
+  projectId: "aika-app",
+  storageBucket: "aika-app.appspot.com",
+  messagingSenderId: "...",
+  appId: "1:...",
 };
 
 firebase.initializeApp(firebaseConfig);
