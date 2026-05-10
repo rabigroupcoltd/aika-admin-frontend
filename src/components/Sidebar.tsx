@@ -18,9 +18,9 @@ const Sidebar = () => {
 
 
   return (
-    <div className="bg-white dark:bg-slate-900 w-64 shadow-lg border-r border-gray-200 dark:border-slate-700 flex flex-col">
+    <div className="bg-background w-64 shadow-lg border-r border-border flex flex-col transition-colors duration-300">
       {/* Logo Section */}
-      <div className="p-6 border-b border-gray-200 dark:border-slate-700">
+      <div className="p-6 border-b border-border">
         <AikaLogo className="w-40" />
       </div>
 
@@ -34,8 +34,8 @@ const Sidebar = () => {
               to={item.path}
               className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
                 isActive
-                  ? 'bg-aiko-green-500 text-white shadow-md'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'text-foreground/70 hover:bg-primary/10 hover:text-primary'
               }`}
             >
               <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
@@ -46,8 +46,8 @@ const Sidebar = () => {
       </nav>
 
       {/* Footer */}
-      <div className="p-6 border-t border-gray-200 dark:border-slate-700">
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">Aiko Admin Portal v1.0</p>
+      <div className="p-6 border-t border-border">
+        <p className="text-xs text-muted-foreground text-center">Aiko Admin Portal v1.0</p>
       </div>
     </div>
   );

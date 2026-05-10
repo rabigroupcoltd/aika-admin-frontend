@@ -11,7 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import { useUsersQuery, useWalletQuery, useCreditWalletMutation, useDebitWalletMutation } from '../hooks/useApiQueries';
-import { Card, LoadingSpinner, EmptyState } from '../components/ui';
+import { Card, LoadingSpinner, EmptyState, Button } from '../components/ui';
 import type { User, WalletInfo } from '../types';
 
 // ─── Wallet Modal ─────────────────────────────────────────────────────────────
@@ -58,19 +58,19 @@ function WalletModal({ user, onClose }: WalletModalProps) {
     new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(v ?? 0);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-card rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-border animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-border">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Wallet Management</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <h2 className="text-xl font-bold text-foreground">Wallet Management</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">
               {user.profile?.name || user.email}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2.5 rounded-xl text-muted-foreground hover:bg-muted transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,32 +78,32 @@ function WalletModal({ user, onClose }: WalletModalProps) {
 
         <div className="p-6 space-y-6">
           {/* Balance Card */}
-          <div className="bg-gradient-to-r from-aiko-green-500 to-aiko-green-600 rounded-xl p-5 text-white shadow-lg">
-            <div className="flex items-center space-x-3 mb-1">
+          <div className="bg-primary rounded-2xl p-6 text-primary-foreground shadow-lg shadow-primary/20">
+            <div className="flex items-center space-x-3 mb-2">
               <Wallet className="w-5 h-5 opacity-80" />
-              <span className="text-sm font-medium opacity-80">Current Balance</span>
+              <span className="text-sm font-bold uppercase tracking-wider opacity-80">Current Balance</span>
             </div>
             {isLoading ? (
-              <div className="h-8 w-32 bg-white bg-opacity-20 rounded animate-pulse mt-1" />
+              <div className="h-10 w-48 bg-white/20 rounded-lg animate-pulse" />
             ) : (
-              <p className="text-3xl font-bold tracking-tight">
+              <p className="text-4xl font-black tracking-tight">
                 {formatCurrency((wallet as WalletInfo)?.balance ?? 0)}
               </p>
             )}
           </div>
 
           {/* Mode Toggle */}
-          <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
+          <div className="flex p-1 bg-muted rounded-2xl border border-border">
             {(['credit', 'debit'] as const).map((m) => (
               <button
                 key={m}
                 onClick={() => { setMode(m); setToast(null); }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold transition-all ${
+                className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold rounded-xl transition-all duration-300 ${
                   mode === m
                     ? m === 'credit'
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-red-500 text-white'
-                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700'
+                      ? 'bg-primary text-primary-foreground shadow-md'
+                      : 'bg-destructive text-destructive-foreground shadow-md'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {m === 'credit' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
@@ -115,25 +115,25 @@ function WalletModal({ user, onClose }: WalletModalProps) {
           {/* Toast */}
           {toast && (
             <div
-              className={`flex items-center gap-3 p-3 rounded-lg text-sm ${
+              className={`flex items-center gap-3 p-4 rounded-2xl text-sm font-medium animate-in slide-in-from-top-2 ${
                 toast.type === 'success'
-                  ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700'
-                  : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700'
+                  ? 'bg-primary/10 text-primary border border-primary/20'
+                  : 'bg-destructive/10 text-destructive border border-destructive/20'
               }`}
             >
               {toast.type === 'success' ? (
-                <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
               ) : (
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <AlertCircle className="w-5 h-5 flex-shrink-0" />
               )}
               {toast.msg}
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-foreground/80 ml-1">
                 Amount (₦)
               </label>
               <input
@@ -144,68 +144,69 @@ function WalletModal({ user, onClose }: WalletModalProps) {
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 5000"
                 required
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-aiko-green-500 dark:bg-slate-800 dark:text-white"
+                className="w-full px-5 py-3.5 bg-muted/30 border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-foreground"
               />
             </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                Note <span className="font-normal text-gray-400">(optional)</span>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-foreground/80 ml-1">
+                Note <span className="font-normal text-muted-foreground">(optional)</span>
               </label>
               <input
                 type="text"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Reason for adjustment"
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-aiko-green-500 dark:bg-slate-800 dark:text-white"
+                className="w-full px-5 py-3.5 bg-muted/30 border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-foreground"
               />
             </div>
-            <button
+            <Button
               type="submit"
               disabled={activeMutation.isPending}
-              className={`w-full py-3 rounded-xl text-white font-semibold text-sm transition-all shadow-md disabled:opacity-60 disabled:cursor-not-allowed ${
-                mode === 'credit'
-                  ? 'bg-emerald-500 hover:bg-emerald-600'
-                  : 'bg-red-500 hover:bg-red-600'
+              variant={mode === 'credit' ? 'primary' : 'outline'}
+              className={`w-full h-14 rounded-2xl font-bold text-lg ${
+                mode === 'debit' ? 'border-destructive text-destructive hover:bg-destructive/10' : ''
               }`}
             >
               {activeMutation.isPending
                 ? 'Processing…'
                 : mode === 'credit'
-                ? 'Credit Wallet'
-                : 'Debit Wallet'}
-            </button>
+                ? 'Confirm Credit'
+                : 'Confirm Debit'}
+            </Button>
           </form>
 
           {/* Recent Transactions */}
           {!isLoading && (wallet as WalletInfo)?.transaction?.length ? (
-            <div>
-              <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+            <div className="pt-4">
+              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4 ml-1">
                 Recent Transactions
               </h3>
-              <ul className="space-y-2 max-h-48 overflow-y-auto pr-1">
+              <ul className="space-y-3 max-h-56 overflow-y-auto pr-2 custom-scrollbar">
                 {(wallet as WalletInfo).transaction!.map((tx) => (
                   <li
                     key={tx.id}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-gray-50 dark:bg-slate-800 text-sm"
+                    className="flex items-center justify-between p-4 rounded-2xl bg-muted/50 border border-border/50 hover:border-border transition-colors"
                   >
-                    <div className="flex items-center gap-2">
-                      {tx.type === 'CREDIT' ? (
-                        <ArrowUpCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                      ) : (
-                        <ArrowDownCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-                      )}
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-xl ${tx.type === 'CREDIT' ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'}`}>
+                        {tx.type === 'CREDIT' ? (
+                          <ArrowUpCircle className="w-5 h-5" />
+                        ) : (
+                          <ArrowDownCircle className="w-5 h-5" />
+                        )}
+                      </div>
                       <div>
-                        <p className="font-medium text-gray-700 dark:text-gray-200">
+                        <p className="font-bold text-foreground text-sm">
                           {tx.description || tx.type}
                         </p>
-                        <p className="text-xs text-gray-400">
-                          {new Date(tx.createdAt).toLocaleDateString()}
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(tx.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })}
                         </p>
                       </div>
                     </div>
                     <span
-                      className={`font-semibold ${
-                        tx.type === 'CREDIT' ? 'text-emerald-600' : 'text-red-500'
+                      className={`font-black text-sm ${
+                        tx.type === 'CREDIT' ? 'text-primary' : 'text-destructive'
                       }`}
                     >
                       {tx.type === 'CREDIT' ? '+' : '-'}
@@ -240,62 +241,64 @@ const Wallets = () => {
   });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-          Wallet Management
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-          Credit or debit user wallets directly from the admin panel
-        </p>
+    <div className="space-y-8 max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-black text-foreground tracking-tight">
+            Wallets
+          </h1>
+          <p className="text-muted-foreground mt-2 font-medium">
+            Manage user balances and transaction history
+          </p>
+        </div>
+        <div className="relative group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search users..."
+            className="w-full md:w-80 pl-12 pr-5 py-3.5 bg-card border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-foreground shadow-sm"
+          />
+        </div>
       </div>
 
-      {/* Search */}
-      <Card>
-        <div className="px-4 md:px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Users ({filtered.length})
+      <Card className="overflow-hidden border-none shadow-xl bg-card/50 backdrop-blur-sm">
+        <div className="px-6 py-5 border-b border-border bg-muted/30">
+          <h2 className="text-lg font-bold text-foreground">
+            All Users <span className="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">{filtered.length}</span>
           </h2>
-          <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name or email…"
-              className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-aiko-green-500 dark:bg-slate-800 dark:text-white"
-            />
-          </div>
         </div>
 
         {filtered.length === 0 ? (
-          <EmptyState message="No users found" />
+          <EmptyState message="No users found matching your search" />
         ) : (
-          <div className="divide-y divide-gray-100 dark:divide-slate-800">
+          <div className="divide-y divide-border">
             {filtered.map((user: User) => (
               <div
                 key={user.id}
-                className="flex items-center justify-between px-4 md:px-6 py-4 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors"
+                className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-5 hover:bg-muted/30 transition-colors gap-4"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-aiko-green-100 dark:bg-aiko-green-900/30 flex items-center justify-center">
-                    <span className="text-aiko-green-600 dark:text-aiko-green-400 font-bold text-sm">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-inner">
+                    <span className="text-primary font-black text-xl">
                       {(user.profile?.name || user.email)?.[0]?.toUpperCase() ?? '?'}
                     </span>
                   </div>
                   <div>
-                    <p className="font-semibold text-sm text-gray-900 dark:text-white">
+                    <p className="font-bold text-foreground text-lg">
                       {user.profile?.name || 'Unknown'}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
+                    <p className="text-sm text-muted-foreground font-medium">{user.email}</p>
                   </div>
                 </div>
-                <button
+                <Button
                   onClick={() => setSelectedUser(user)}
-                  className="flex items-center gap-2 px-4 py-2 bg-aiko-green-500 hover:bg-aiko-green-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+                  variant="primary"
+                  className="rounded-2xl px-6 py-3 font-bold flex items-center justify-center gap-2"
                 >
-                  <Wallet className="w-4 h-4" />
-                  <span className="hidden sm:inline">Manage Wallet</span>
-                </button>
+                  <Wallet className="w-5 h-5" />
+                  Manage Wallet
+                </Button>
               </div>
             ))}
           </div>

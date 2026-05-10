@@ -7,7 +7,7 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ children, className = '' }) => {
   return (
-    <div className={`bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-lg border border-gray-200 dark:border-slate-700 ${className}`}>
+    <div className={`bg-card rounded-xl shadow-sm border border-border transition-colors duration-300 ${className}`}>
       {children}
     </div>
   );
@@ -21,14 +21,14 @@ interface StatCardProps {
 
 export const StatCard: React.FC<StatCardProps> = ({ label, value, icon }) => {
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow">
+    <Card className="p-6 hover:shadow-md transition-all duration-300">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{label}</p>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{value}</p>
+          <p className="text-sm font-medium text-muted-foreground">{label}</p>
+          <p className="text-3xl font-bold text-foreground mt-2">{value}</p>
         </div>
         {icon && (
-          <div className="p-3 bg-aiko-green-100 dark:bg-aiko-green-900 rounded-lg text-aiko-green-600 dark:text-aiko-green-300">
+          <div className="p-3 bg-primary/10 rounded-lg text-primary">
             {icon}
           </div>
         )}
@@ -50,7 +50,7 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const baseClasses = 'font-medium rounded-lg transition-colors duration-200';
+  const baseClasses = 'font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',
@@ -59,9 +59,9 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const variantClasses = {
-    primary: 'bg-aiko-green-500 hover:bg-aiko-green-600 text-white dark:bg-aiko-green-600 dark:hover:bg-aiko-green-700',
-    secondary: 'bg-aiko-dark-500 hover:bg-aiko-dark-600 text-white dark:bg-aiko-dark-600 dark:hover:bg-aiko-dark-700',
-    outline: 'border-2 border-aiko-green-500 text-aiko-green-500 hover:bg-aiko-green-50 dark:border-aiko-green-400 dark:text-aiko-green-400 dark:hover:bg-aiko-dark-900',
+    primary: 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm',
+    secondary: 'bg-secondary hover:bg-secondary/80 text-secondary-foreground shadow-sm',
+    outline: 'border-2 border-primary text-primary hover:bg-primary/5',
   };
 
   return (
@@ -78,8 +78,7 @@ export const LoadingSpinner: React.FC = () => {
   return (
     <div className="flex items-center justify-center p-8">
       <div className="relative w-12 h-12">
-        <div className="absolute inset-0 bg-gradient-to-r from-aiko-green-500 to-aiko-green-600 rounded-full animate-spin"></div>
-        <div className="absolute inset-1 bg-white dark:bg-slate-800 rounded-full"></div>
+        <div className="absolute inset-0 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
       </div>
     </div>
   );
@@ -87,8 +86,8 @@ export const LoadingSpinner: React.FC = () => {
 
 export const EmptyState: React.FC<{ message: string }> = ({ message }) => {
   return (
-    <div className="flex items-center justify-center p-8">
-      <p className="text-gray-500 dark:text-gray-400">{message}</p>
+    <div className="flex flex-col items-center justify-center p-12 text-center">
+      <p className="text-muted-foreground font-medium">{message}</p>
     </div>
   );
 };
@@ -101,17 +100,17 @@ interface TableProps {
 export const Table: React.FC<TableProps> = ({ headers, children }) => {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead className="bg-gray-50 dark:bg-slate-700 border-b border-gray-200 dark:border-slate-600">
+      <table className="w-full border-collapse">
+        <thead className="bg-muted/30 border-b border-border">
           <tr>
             {headers.map((header) => (
-              <th key={header} className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <th key={header} className="px-6 py-4 text-left text-xs font-bold text-foreground/60 uppercase tracking-widest">
                 {header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
+        <tbody className="divide-y divide-border">
           {children}
         </tbody>
       </table>
