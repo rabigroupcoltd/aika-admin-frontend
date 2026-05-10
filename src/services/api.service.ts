@@ -8,6 +8,10 @@ import type {
   KycApprovalResponse,
   PayoutProcessResponse,
   WalletInfo,
+  DashboardAnalytics,
+  Order,
+  Rider,
+  Transaction,
 } from '../types';
 
 class ApiService {
