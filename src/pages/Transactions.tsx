@@ -1,5 +1,5 @@
-import React from 'react';
-import { CreditCard, Search, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+// import React from 'react';
+import { Search, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import { useTransactionsQuery } from '../hooks/useApiQueries';
 import { Table, LoadingSpinner, EmptyState, Card } from '../components/ui';
 

@@ -1,5 +1,5 @@
 // import React from 'react';
-import { Users, Bike, Package, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
+import { Users, Bike, Package, TrendingUp, ArrowUp } from 'lucide-react';
 import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area, Cell, PieChart, Pie
