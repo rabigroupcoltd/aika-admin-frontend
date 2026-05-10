@@ -1,8 +1,8 @@
-import React from 'react';
+// import React from 'react';
 import { Users, Bike, Package, TrendingUp, ArrowUp, ArrowDown } from 'lucide-react';
-import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  AreaChart, Area, BarChart, Bar, Cell, PieChart, Pie
+import {
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  AreaChart, Area, Cell, PieChart, Pie
 } from 'recharts';
 import { useDashboardQuery, useDashboardAnalyticsQuery } from '../hooks/useApiQueries';
 import { StatCard, LoadingSpinner, EmptyState, Card } from '../components/ui';
@@ -78,34 +78,34 @@ const Dashboard = () => {
               <AreaChart data={analyticsData?.monthlyTransactions || []}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                <XAxis 
-                  dataKey="month" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#9CA3AF', fontSize: 12}}
+                <XAxis
+                  dataKey="month"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#9CA3AF', fontSize: 12 }}
                   dy={10}
                 />
-                <YAxis 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#9CA3AF', fontSize: 12}}
-                  tickFormatter={(value) => `₦${value/1000}k`}
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#9CA3AF', fontSize: 12 }}
+                  tickFormatter={(value) => `₦${value / 1000}k`}
                 />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="total" 
-                  stroke="#10B981" 
+                <Area
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#10B981"
                   strokeWidth={3}
-                  fillOpacity={1} 
-                  fill="url(#colorRevenue)" 
+                  fillOpacity={1}
+                  fill="url(#colorRevenue)"
                 />
               </AreaChart>
             </ResponsiveContainer>
