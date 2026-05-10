@@ -4,12 +4,14 @@ import { Card, Button, LoadingSpinner, EmptyState } from '../components/ui';
 import type { User } from '../types';
 
 const KycApprovals = () => {
-  const { data: users = [], isLoading, isError } = usePendingKycQuery();
+  const { data, isLoading, isError } = usePendingKycQuery();
   const approveMutation = useApproveDriverMutation();
 
   if (isLoading) return <LoadingSpinner />;
 
-  if (isError || !users) {
+  const users = data?.result || [];
+
+  if (isError) {
     return <EmptyState message="Failed to load KYC requests" />;
   }
 
