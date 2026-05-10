@@ -28,8 +28,27 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
-  user?: User;
+  accessToken: string;
+  expiresIn?: string;
+  role?: string;
+  userInfo?: User;
+}
+
+export interface WalletInfo {
+  id: string;
+  balance: number;
+  userId: string;
+  transaction?: WalletTransaction[];
+}
+
+export interface WalletTransaction {
+  id: string;
+  amount: number;
+  type: 'CREDIT' | 'DEBIT';
+  status: string;
+  description?: string;
+  transactionRef: string;
+  createdAt: string;
 }
 
 export interface PayoutProcessResponse {

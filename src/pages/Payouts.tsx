@@ -8,7 +8,7 @@ const Payouts = () => {
   return (
     <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-aiko-dark-900 dark:text-white">Process Payouts</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Process Payouts</h1>
         <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">
           Calculate and distribute payments to approved drivers
         </p>
@@ -38,7 +38,7 @@ const Payouts = () => {
               <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm md:text-base font-semibold text-aiko-dark-900 dark:text-white">
+              <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">
                 Processed
               </h3>
               <p className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400 mt-1">0</p>
@@ -80,12 +80,12 @@ const Payouts = () => {
 
           <div className="space-y-4">
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 p-3 md:p-4 bg-gray-50 dark:bg-aiko-dark-800 rounded-lg">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 p-3 md:p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
               <div>
                 <label className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
                   Total Amount to Process
                 </label>
-                <p className="text-xl md:text-2xl font-bold text-aiko-dark-900 dark:text-white mt-2">
+                <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-2">
                   ₦0.00
                 </p>
               </div>
@@ -93,7 +93,7 @@ const Payouts = () => {
                 <label className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
                   Number of Drivers
                 </label>
-                <p className="text-xl md:text-2xl font-bold text-aiko-dark-900 dark:text-white mt-2">0</p>
+                <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-2">0</p>
               </div>
             </div>
 

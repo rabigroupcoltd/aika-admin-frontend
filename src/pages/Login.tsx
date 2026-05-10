@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
 import { useLoginMutation } from '../hooks/useApiQueries';
 import { AikaLogo } from '../components/AikaLogo';
 import { Button } from '../components/ui';
+import type { LoginResponse } from '../types';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,14 +12,22 @@ const Login = () => {
   const navigate = useNavigate();
   const loginMutation = useLoginMutation();
 
+  // Redirect if already authenticated
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      navigate('/app', { replace: true });
+    }
+  }, [navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
 loginMutation.mutate(
         { email, password },
         {
-          onSuccess: (data: { token: string }) => {
-            localStorage.setItem('admin_token', data.token);
+          onSuccess: (data: LoginResponse) => {
+            localStorage.setItem('admin_token', data.accessToken);
             navigate('/app');
           },
         }

@@ -9,9 +9,11 @@ export const queryKeys = {
   all: ['api'] as const,
   dashboard: () => [...queryKeys.all, 'dashboard'] as const,
   users: () => [...queryKeys.all, 'users'] as const,
+  user: (id: string) => [...queryKeys.all, 'user', id] as const,
   pendingKyc: () => [...queryKeys.all, 'pending-kyc'] as const,
   payouts: () => [...queryKeys.all, 'payouts'] as const,
   auth: () => [...queryKeys.all, 'auth'] as const,
+  wallet: (userId: string) => [...queryKeys.all, 'wallet', userId] as const,
 } as const;
 
 export const useDashboardQuery = () => {
@@ -41,6 +43,16 @@ export const usePendingKycQuery = () => {
   });
 };
 
+export const useWalletQuery = (userId: string) => {
+  return useQuery({
+    queryKey: queryKeys.wallet(userId),
+    queryFn: () => apiService.getUserWallet(userId),
+    enabled: !!userId,
+    staleTime: 1000 * 60,
+    retry: 1,
+  });
+};
+
 export const useApproveDriverMutation = () => {
   const queryClient = useQueryClient();
 
@@ -61,6 +73,32 @@ export const useProcessPayoutsMutation = () => {
     mutationFn: () => apiService.processPayouts(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.payouts() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard() });
+    },
+  });
+};
+
+export const useCreditWalletMutation = (userId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ amount, note }: { amount: number; note?: string }) =>
+      apiService.creditWallet(userId, amount, note),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.wallet(userId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.dashboard() });
+    },
+  });
+};
+
+export const useDebitWalletMutation = (userId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ amount, note }: { amount: number; note?: string }) =>
+      apiService.debitWallet(userId, amount, note),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.wallet(userId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.dashboard() });
     },
   });

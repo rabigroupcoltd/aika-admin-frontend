@@ -7,6 +7,7 @@ import type {
   KycApprovalRequest,
   KycApprovalResponse,
   PayoutProcessResponse,
+  WalletInfo,
 } from '../types';
 
 class ApiService {
@@ -20,13 +21,18 @@ class ApiService {
     return data.data;
   }
 
+  async getUser(id: string): Promise<User> {
+    const { data } = await apiClient.get<{ data: User }>(`/user/${id}`);
+    return data.data;
+  }
+
   async getPendingKyc(): Promise<User[]> {
     const { data } = await apiClient.get<{ data: User[] }>('/user?driverStatus=PENDING');
     return data.data;
   }
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const { data } = await apiClient.post<{ data: LoginResponse }>('/auth/login', credentials);
+    const { data } = await apiClient.post<{ data: LoginResponse }>('/auth/signin', credentials);
     return data.data;
   }
 
@@ -44,6 +50,22 @@ class ApiService {
   async processPayouts(): Promise<PayoutProcessResponse> {
     const { data } = await apiClient.post<PayoutProcessResponse>('/payouts/process');
     return data;
+  }
+
+  // Wallet management
+  async getUserWallet(userId: string): Promise<WalletInfo> {
+    const { data } = await apiClient.get<{ data: WalletInfo }>(`/wallet/${userId}`);
+    return data.data;
+  }
+
+  async creditWallet(userId: string, amount: number, note?: string): Promise<WalletInfo> {
+    const { data } = await apiClient.post<{ data: WalletInfo }>(`/wallet/${userId}/credit`, { amount, note });
+    return data.data;
+  }
+
+  async debitWallet(userId: string, amount: number, note?: string): Promise<WalletInfo> {
+    const { data } = await apiClient.post<{ data: WalletInfo }>(`/wallet/${userId}/debit`, { amount, note });
+    return data.data;
   }
 }
 

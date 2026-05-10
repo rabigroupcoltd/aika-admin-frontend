@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import KycApprovals from './pages/KycApprovals';
 import Payouts from './pages/Payouts';
+import Wallets from './pages/Wallets';
 import Layout from './components/Layout';
 
 const queryClient = new QueryClient({
@@ -53,6 +54,7 @@ function AppContent() {
           <Route path="users" element={<Users />} />
           <Route path="kyc" element={<KycApprovals />} />
           <Route path="payouts" element={<Payouts />} />
+          <Route path="wallets" element={<Wallets />} />
         </Route>
       </Routes>
     </Router>

@@ -5,7 +5,7 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
  * Centralized axios instance with request/response interceptors
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({

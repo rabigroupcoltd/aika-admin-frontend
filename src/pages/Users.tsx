@@ -28,16 +28,16 @@ const Users = () => {
   return (
     <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-aiko-dark-900 dark:text-white">Users Management</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Users Management</h1>
         <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">
           Manage all registered users and their profiles
         </p>
       </div>
 
       <Card>
-        <div className="px-4 md:px-6 py-4 border-b border-gray-200 dark:border-aiko-dark-700">
+        <div className="px-4 md:px-6 py-4 border-b border-gray-200 dark:border-slate-700">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg md:text-xl font-semibold text-aiko-dark-900 dark:text-white">All Users</h2>
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white">All Users</h2>
             <span className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">{users.length} total</span>
           </div>
         </div>
@@ -50,10 +50,10 @@ const Users = () => {
               {users.map((user: User) => (
                 <tr
                   key={user.id}
-                  className="hover:bg-gray-50 dark:hover:bg-aiko-dark-800 transition-colors text-sm"
+                  className="hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors text-sm"
                 >
                   <td className="px-4 md:px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-aiko-dark-900 dark:text-white">
+                    <div className="font-medium text-gray-900 dark:text-white">
                       {user.profile?.name || 'Unknown'}
                     </div>
                   </td>

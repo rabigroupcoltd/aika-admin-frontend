@@ -15,8 +15,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const stored = localStorage.getItem('aiko-theme');
     if (stored) return stored as Theme;
     
-    // Check system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // Default to light (green and white) if nothing in localStorage
+    return 'light';
   });
 
   useEffect(() => {

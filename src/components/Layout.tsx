@@ -4,7 +4,7 @@ import Header from './Header';
 
 const Layout = () => {
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-aiko-dark-950 flex-col md:flex-row">
+    <div className="flex h-screen bg-white dark:bg-slate-950 flex-col md:flex-row">
       {/* Sidebar - Hidden on mobile, shown on medium screens and up */}
       <div className="hidden md:block md:w-64">
         <Sidebar />

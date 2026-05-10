@@ -7,7 +7,7 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ children, className = '' }) => {
   return (
-    <div className={`bg-white dark:bg-aiko-dark-800 rounded-lg shadow-md dark:shadow-lg border border-gray-200 dark:border-aiko-dark-700 ${className}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-lg border border-gray-200 dark:border-slate-700 ${className}`}>
       {children}
     </div>
   );
@@ -25,7 +25,7 @@ export const StatCard: React.FC<StatCardProps> = ({ label, value, icon }) => {
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{label}</p>
-          <p className="text-3xl font-bold text-aiko-dark-900 dark:text-white mt-2">{value}</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{value}</p>
         </div>
         {icon && (
           <div className="p-3 bg-aiko-green-100 dark:bg-aiko-green-900 rounded-lg text-aiko-green-600 dark:text-aiko-green-300">
@@ -78,8 +78,8 @@ export const LoadingSpinner: React.FC = () => {
   return (
     <div className="flex items-center justify-center p-8">
       <div className="relative w-12 h-12">
-        <div className="absolute inset-0 bg-gradient-to-r from-aiko-green-500 to-aiko-dark-500 rounded-full animate-spin"></div>
-        <div className="absolute inset-1 bg-white dark:bg-aiko-dark-800 rounded-full"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-aiko-green-500 to-aiko-green-600 rounded-full animate-spin"></div>
+        <div className="absolute inset-1 bg-white dark:bg-slate-800 rounded-full"></div>
       </div>
     </div>
   );
@@ -102,7 +102,7 @@ export const Table: React.FC<TableProps> = ({ headers, children }) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
-        <thead className="bg-gray-50 dark:bg-aiko-dark-700 border-b border-gray-200 dark:border-aiko-dark-600">
+        <thead className="bg-gray-50 dark:bg-slate-700 border-b border-gray-200 dark:border-slate-600">
           <tr>
             {headers.map((header) => (
               <th key={header} className="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
@@ -111,7 +111,7 @@ export const Table: React.FC<TableProps> = ({ headers, children }) => {
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-aiko-dark-700">
+        <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
           {children}
         </tbody>
       </table>

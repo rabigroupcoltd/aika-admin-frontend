@@ -5,9 +5,9 @@ const Header = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="bg-white dark:bg-aiko-dark-900 shadow-sm px-6 py-4 border-b border-gray-200 dark:border-aiko-dark-700">
+    <header className="bg-white dark:bg-slate-900 shadow-sm px-6 py-4 border-b border-gray-200 dark:border-slate-700">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-aiko-dark-900 dark:text-white">Admin Dashboard</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h2>
         <div className="flex items-center space-x-6">
           {/* Notifications */}
           <button className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-aiko-green-500 dark:hover:text-aiko-green-400 transition-colors">

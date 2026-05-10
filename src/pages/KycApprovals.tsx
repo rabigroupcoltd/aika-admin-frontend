@@ -16,7 +16,7 @@ const KycApprovals = () => {
   return (
     <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-aiko-dark-900 dark:text-white">KYC Approvals</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">KYC Approvals</h1>
         <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">
           Review and approve driver KYC documents
         </p>
@@ -26,7 +26,7 @@ const KycApprovals = () => {
         <Card className="p-6 md:p-8">
           <div className="flex flex-col items-center justify-center text-center">
             <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
-            <h3 className="text-lg font-semibold text-aiko-dark-900 dark:text-white">All Caught Up!</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">All Caught Up!</h3>
             <p className="text-gray-600 dark:text-gray-400 mt-2">No pending KYC approvals at this moment.</p>
           </div>
         </Card>
@@ -37,7 +37,7 @@ const KycApprovals = () => {
               <div className="grid md:grid-cols-3 gap-4 md:gap-6">
                 {/* User Info */}
                 <div className="col-span-1">
-                  <h3 className="text-base md:text-lg font-semibold text-aiko-dark-900 dark:text-white">
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
                     {user.profile?.name || 'Unknown'}
                   </h3>
                   <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1 truncate">
@@ -53,7 +53,7 @@ const KycApprovals = () => {
 
                 {/* Documents */}
                 <div className="col-span-1">
-                  <h4 className="text-sm font-semibold text-aiko-dark-900 dark:text-white mb-2 md:mb-3 flex items-center">
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 md:mb-3 flex items-center">
                     <FileText className="w-4 h-4 mr-2 text-aiko-green-500" />
                     Documents
                   </h4>
