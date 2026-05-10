@@ -9,10 +9,12 @@ import {
   AlertCircle,
   CheckCircle,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { useUsersQuery, useWalletQuery, useCreditWalletMutation, useDebitWalletMutation } from '../hooks/useApiQueries';
 import { Card, LoadingSpinner, EmptyState, Button } from '../components/ui';
-import type { User, WalletInfo } from '../types';
+import type { User, WalletInfo, QueryParams } from '../types';
 
 // ─── Wallet Modal ─────────────────────────────────────────────────────────────
 interface WalletModalProps {
@@ -225,20 +227,19 @@ function WalletModal({ user, onClose }: WalletModalProps) {
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
 const Wallets = () => {
-  const { data: users = [], isLoading, isError } = useUsersQuery();
-  const [search, setSearch] = useState('');
+  const [params, setParams] = useState<QueryParams>({
+    page: 1,
+    size: 10,
+    search: '',
+  });
+
+  const { data, isLoading, isError } = useUsersQuery(params);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   if (isLoading) return <LoadingSpinner />;
-  if (isError) return <EmptyState message="Failed to load users" />;
 
-  const filtered = users.filter((u: User) => {
-    const q = search.toLowerCase();
-    return (
-      u.email?.toLowerCase().includes(q) ||
-      u.profile?.name?.toLowerCase().includes(q)
-    );
-  });
+  const users = data?.result || [];
+  const totalPages = data?.totalPages || 1;
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
@@ -254,8 +255,8 @@ const Wallets = () => {
         <div className="relative group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={params.search}
+            onChange={(e) => setParams(prev => ({ ...prev, search: e.target.value, page: 1 }))}
             placeholder="Search users..."
             className="w-full md:w-80 pl-12 pr-5 py-3.5 bg-card border border-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-foreground shadow-sm"
           />
@@ -265,43 +266,76 @@ const Wallets = () => {
       <Card className="overflow-hidden border-none shadow-xl bg-card/50 backdrop-blur-sm">
         <div className="px-6 py-5 border-b border-border bg-muted/30">
           <h2 className="text-lg font-bold text-foreground">
-            All Users <span className="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">{filtered.length}</span>
+            All Users <span className="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">{data?.totalItems || 0}</span>
           </h2>
         </div>
 
-        {filtered.length === 0 ? (
-          <EmptyState message="No users found matching your search" />
-        ) : (
-          <div className="divide-y divide-border">
-            {filtered.map((user: User) => (
-              <div
-                key={user.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-5 hover:bg-muted/30 transition-colors gap-4"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-inner">
-                    <span className="text-primary font-black text-xl">
-                      {(user.profile?.name || user.email)?.[0]?.toUpperCase() ?? '?'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-bold text-foreground text-lg">
-                      {user.profile?.name || 'Unknown'}
-                    </p>
-                    <p className="text-sm text-muted-foreground font-medium">{user.email}</p>
-                  </div>
-                </div>
-                <Button
-                  onClick={() => setSelectedUser(user)}
-                  variant="primary"
-                  className="rounded-2xl px-6 py-3 font-bold flex items-center justify-center gap-2"
-                >
-                  <Wallet className="w-5 h-5" />
-                  Manage Wallet
-                </Button>
-              </div>
-            ))}
+        {isError ? (
+           <div className="p-20">
+            <EmptyState message="Failed to load users. Please refresh the page." />
           </div>
+        ) : users.length === 0 ? (
+          <div className="p-20">
+            <EmptyState message="No users found matching your search" />
+          </div>
+        ) : (
+          <>
+            <div className="divide-y divide-border">
+              {users.map((user: User) => (
+                <div
+                  key={user.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-5 hover:bg-muted/30 transition-colors gap-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-inner">
+                      <span className="text-primary font-black text-xl">
+                        {(user.profile?.name || user.email)?.[0]?.toUpperCase() ?? '?'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="font-bold text-foreground text-lg">
+                        {user.profile?.name || 'Unknown'}
+                      </p>
+                      <p className="text-sm text-muted-foreground font-medium">{user.email}</p>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => setSelectedUser(user)}
+                    variant="primary"
+                    className="rounded-2xl px-6 py-3 font-bold flex items-center justify-center gap-2"
+                  >
+                    <Wallet className="w-5 h-5" />
+                    Manage Wallet
+                  </Button>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {data && data.totalPages > 1 && (
+                <div className="flex items-center justify-between p-6 border-t border-border">
+                    <div className="text-sm font-medium text-muted-foreground">
+                    Showing <span className="text-foreground font-bold">{(params.page! - 1) * params.size! + 1}</span> to <span className="text-foreground font-bold">{Math.min(params.page! * params.size!, data.totalItems)}</span> of <span className="text-foreground font-bold">{data.totalItems}</span> users
+                    </div>
+                    <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setParams(prev => ({ ...prev, page: prev.page! - 1 }))}
+                        disabled={params.page === 1}
+                        className="p-2 rounded-lg border border-border bg-card hover:bg-muted disabled:opacity-30 transition-all"
+                    >
+                        <ChevronLeft className="w-4 h-4 text-foreground" />
+                    </button>
+                    <button
+                        onClick={() => setParams(prev => ({ ...prev, page: prev.page! + 1 }))}
+                        disabled={params.page === totalPages}
+                        className="p-2 rounded-lg border border-border bg-card hover:bg-muted disabled:opacity-30 transition-all"
+                    >
+                        <ChevronRight className="w-4 h-4 text-foreground" />
+                    </button>
+                    </div>
+                </div>
+            )}
+          </>
         )}
       </Card>
 
