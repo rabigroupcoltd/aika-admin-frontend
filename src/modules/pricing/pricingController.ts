@@ -1,0 +1,97 @@
+import { useQuery } from '@tanstack/react-query';
+import AxiosWithToken from '@/constants/api_management/MyHttpHelperWithToken';
+import useApiManager, { omitKeys, type ApiResponse } from '@/constants/mainController';
+import { parseApiError } from '@/utils/parseApiError';
+import type { VehicleType } from '@/modules/orders/ordersController';
+
+// ============================================
+// TypeScript Interfaces
+// ============================================
+
+/**
+ * One vehicle type's fare rule.
+ *
+ * Field names match the Prisma model exactly — `avgSpeedKph`, not
+ * `averageSpeedKph`. A near-miss here silently sends a property the DTO drops,
+ * and the save appears to succeed while changing nothing.
+ */
+export interface PricingRule {
+  id: string;
+  vehicleType: VehicleType;
+  /** Charged before any distance. */
+  baseFare: number;
+  perKm: number;
+  perMinute: number;
+  /** Floor — short trips never quote below this. */
+  minimumFare: number;
+  bookingFee: number;
+  /** 1 is normal pricing. Multiplies the whole fare. */
+  surgeMultiplier: number;
+  /** Turns distance into an ETA and into the per-minute charge. */
+  avgSpeedKph: number;
+  /** The cut Aiko keeps; the rest is the driver's earnings. */
+  platformFeePercent: number;
+  currency: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdatePricingVariables extends Partial<Omit<PricingRule, 'vehicleType'>> {
+  vehicleType: VehicleType;
+}
+
+export const PRICING_QUERY_KEY = 'pricing';
+
+// ============================================
+// QUERY CONTROLLERS
+// ============================================
+
+export const useGetPricingRulesManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  return useQuery({
+    queryKey: [PRICING_QUERY_KEY, 'list'],
+    queryFn: async () => {
+      try {
+        const response = await AxiosWithToken.get<ApiResponse<PricingRule[]>>('/pricing');
+        return response.data.data;
+      } catch (error) {
+        throw new Error(parseApiError(error));
+      }
+    },
+    enabled,
+    refetchOnWindowFocus: false,
+  });
+};
+
+// ============================================
+// MUTATION CONTROLLERS
+// ============================================
+
+/**
+ * Change one vehicle's rate card.
+ *
+ * The screen sends only the fields an admin actually edited. Posting the whole
+ * rule back would overwrite anything a second admin changed between this page
+ * loading and Save — which is exactly the kind of edit nobody notices until a
+ * fare comes out wrong.
+ */
+export const UpdatePricingRuleManager = () => {
+  const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
+    PricingRule,
+    Error,
+    UpdatePricingVariables
+  >({
+    endpoint: ({ vehicleType }: UpdatePricingVariables) => `/pricing/${vehicleType}`,
+    getBody: omitKeys<UpdatePricingVariables>('vehicleType'),
+    queryKey: [PRICING_QUERY_KEY],
+    method: 'PATCH',
+    showSuccessToast: true,
+  });
+
+  const updatePricingRule = async (details: UpdatePricingVariables) => {
+    const result = await callApi(details);
+    return result.data;
+  };
+
+  return { updatePricingRule, data, isLoading, isSuccess, isError, error };
+};

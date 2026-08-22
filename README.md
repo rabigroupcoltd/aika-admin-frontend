@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aiko Admin
 
-## Getting Started
+The operations console for the Aiko delivery marketplace. Vite + React + React
+Router, talking to the NestJS API in `../backend`.
 
-First, run the development server:
+## Running
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:5174
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Vite proxies `/api` to `http://localhost:3000`, so the backend must be running.
+Point it somewhere else with `VITE_API_PROXY` in `.env.local`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Sign in with a seeded `ADMIN` account. App accounts are created through Firebase
+and carry no password, so they can never authenticate here — which is the point.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## What is in it
 
-## Learn More
+| Section | What it does | API |
+|---|---|---|
+| **Dashboard** | Live tiles, 14-day order and revenue trend, vehicle split, activity feed | `/admin/summary`, `/admin/trend`, `/admin/vehicle-split`, `/admin/activity` |
+| **Orders** | Every delivery, filterable by status; detail view with cancel | `/orders` |
+| **Drivers** | The fleet, with KYC status, shift state and debt | `/drivers` |
+| **KYC Approvals** | The approval work queue — approve or reject with a reason | `/drivers/:id/kyc/*` |
+| **Users** | Everyone with an account | `/users` |
+| **Financials** | Revenue, platform earnings, outstanding debt, top drivers | `/analytics/*` |
+| **Wallets & Payouts** | Who owes what, sorted by exposure against their limit | `/drivers` |
+| **Pricing & Rate Card** | Editable fare rules per vehicle, with a worked example | `/pricing` |
+| **Support** | Ticket queue, threads, internal notes | `/support` |
+| **Dispatch Activity** | The live driver pool and every unclaimed order | `/admin/socket-activity` |
+| **Audit Logs** | Append-only trail of admin actions | `/audit` |
+| **Settings** | How this deployment is configured | — |
 
-To learn more about Next.js, take a look at the following resources:
+## Notes worth knowing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Two paging envelopes.** The older controllers return
+`{ totalItems, totalPages, currentPage, result }`; the newer `audit` module
+returns `{ data, meta }`. `src/services/api.ts` names the first `Paged<T>`.
+Getting this wrong renders an empty table rather than failing to compile.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**`/drivers` and `/users` are not paginated.** They return the whole filtered
+array, which is why search on those screens is client-side. Fine at pilot scale;
+move it server-side when the fleet outgrows one response.
 
-## Deploy on Vercel
+**Dispatch Activity is the diagnostic screen.** The `Reached` column answers the
+question the orders table cannot: an unclaimed order that reached *nobody* means
+no drivers are online in range, and widening the radius will not help. One that
+reached everybody and is still sitting there is a pricing or parcel problem.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Not included
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+juzogo's Plans, Subscriptions and Webhook Events have no equivalent here — Aiko
+is pay-per-delivery, not subscription-based, so those screens would have had
+nothing to show.
