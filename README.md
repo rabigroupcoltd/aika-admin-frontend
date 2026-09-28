@@ -13,6 +13,13 @@ npm run dev          # http://localhost:5174
 Vite proxies `/api` to `http://localhost:3000`, so the backend must be running.
 Point it somewhere else with `VITE_API_PROXY` in `.env.local`.
 
+**That proxy is `npm run dev` only.** `npm run preview` and every real deployment
+(there is no `vercel.json`/`netlify.toml`/`_redirects` here to substitute for
+it) need `VITE_API_BASE_URL` set to the backend's actual URL — e.g.
+`https://your-backend.onrender.com/api` — as a real environment variable
+wherever this is built, or every request 404s starting with login. See
+`.env.example`.
+
 Sign in with a seeded `ADMIN` account, or any `ADMIN`/`SUPPORT` account created
 from the Users screen afterwards. App accounts are created through Firebase and
 carry no password, so they can never authenticate here — which is the point.
