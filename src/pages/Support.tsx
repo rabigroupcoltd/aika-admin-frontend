@@ -14,7 +14,8 @@ import {
   cn,
 } from '@/components/ui';
 import { priorityTone, relative, supportTone } from '@/lib/format';
-import { useGetTicketsManager, type SupportStatus } from '@/modules/support/supportController';
+import { useGetTicketsManager } from '@/modules/support/supportController';
+import type { SupportStatus } from '@/modules/support/type';
 
 const TABS: { value: SupportStatus | ''; label: string }[] = [
   { value: 'OPEN', label: 'Open' },

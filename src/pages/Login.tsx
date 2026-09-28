@@ -26,10 +26,13 @@ export function Login() {
     try {
       const result = await signIn({ email: email.trim(), password });
 
-      // The API refuses non-admins, but a USER token would otherwise be stored
-      // and produce a wall of 403s instead of a sentence explaining why.
-      if (!result.user.roles?.includes('ADMIN')) {
-        setError('That account is not an administrator.');
+      // The API refuses a plain USER/RIDER token, but it would otherwise be
+      // stored here and produce a wall of 403s instead of a sentence
+      // explaining why. ADMIN and SUPPORT are the only two roles this
+      // dashboard is for — see roles.decorator.ts.
+      const isStaff = result.user.roles?.some((role) => role === 'ADMIN' || role === 'SUPPORT');
+      if (!isStaff) {
+        setError('That account cannot sign in to the admin dashboard.');
         return;
       }
 

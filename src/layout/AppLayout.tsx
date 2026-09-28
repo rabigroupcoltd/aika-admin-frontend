@@ -5,6 +5,7 @@ import { cn } from '@/components/ui';
 import { useTheme } from '@/hooks/useTheme';
 import { clearToken } from '@/constants/api_management/MyHttpHelperWithToken';
 import { useGetAdminSummaryManager } from '@/modules/admin/adminController';
+import { useGetCurrentAdminManager } from '@/modules/auth/authController';
 import { AppSidebar } from './AppSidebar';
 
 /**
@@ -26,6 +27,12 @@ export function AppLayout() {
   // this with the dashboard's own call, so it costs nothing extra there.
   const { data: summary } = useGetAdminSummaryManager({ refetchInterval: 60_000 });
 
+  // SUPPORT sees a narrower sidebar — no pricing, wallets, settings, audit or
+  // KYC approval. Defaults to the narrower view while this is still loading,
+  // so a support account never sees an admin-only link flash on screen.
+  const { data: currentAdmin } = useGetCurrentAdminManager();
+  const isAdmin = Boolean(currentAdmin?.roles.includes('ADMIN'));
+
   function signOut() {
     clearToken();
     navigate('/login', { replace: true });
@@ -44,6 +51,7 @@ export function AppLayout() {
 
       <AppSidebar
         open={sidebarOpen}
+        isAdmin={isAdmin}
         counts={{
           pendingKyc: summary?.drivers.pendingKyc,
           openTickets: summary?.support.open,

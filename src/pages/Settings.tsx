@@ -1,18 +1,29 @@
-import { Card, CardHeader, PageHeader, Spinner } from '@/components/ui';
-import { money } from '@/lib/format';
+import { useState } from 'react';
+import { Badge, Button, Card, CardHeader, Input, PageHeader, Spinner } from '@/components/ui';
+import { dateTime, money } from '@/lib/format';
 import { useGetAdminSummaryManager } from '@/modules/admin/adminController';
+import {
+  UpdatePlatformSettingManager,
+  useGetPlatformSettingsManager,
+} from '@/modules/settings/settingsController';
+import type { PlatformSetting } from '@/modules/settings/type';
+import { parseApiError } from '@/utils/parseApiError';
 
 /**
  * Settings.
  *
- * Read-only for now, and deliberately so. Every dial the marketplace turns —
- * search radius, capacity, detour limits, heartbeat TTL — is read from the
- * environment at boot on the server, so a form here could not change them
- * without a deploy. Showing them is still worth doing: an operator debugging
- * "why did nobody get this order" needs to know what the radius actually is.
+ * Most of what the marketplace turns — search radius, capacity, detour
+ * limits, heartbeat TTL — is still read from the environment at boot on the
+ * server, so a form here could not change them without a deploy. Showing them
+ * is still worth doing: an operator debugging "why did nobody get this
+ * order" needs to know what the radius actually is.
  *
- * Pricing is the exception and lives on its own screen, because it is stored in
- * the database and genuinely is editable.
+ * Per-vehicle pricing lives on its own screen because it is stored in the
+ * database and genuinely is editable. The "Pricing settings" card below is
+ * the same exception, one level up — two numbers every fare quote reads
+ * (fare rounding, the road-distance fallback factor), also DB-backed via
+ * `PlatformSetting`, also editable here, and taking effect on the very next
+ * quote rather than needing a deploy.
  */
 export function Settings() {
   const { data, isLoading } = useGetAdminSummaryManager();
@@ -58,8 +69,10 @@ export function Settings() {
           </p>
         </Card>
 
+        <PlatformSettingsCard />
+
         <Card>
-          <CardHeader title="Pricing" subtitle="Stored in the database and editable." />
+          <CardHeader title="Pricing" subtitle="Per-vehicle rate cards." />
           <p className="text-sm text-aiko-dark-600 dark:text-aiko-dark-300">
             Fares, platform commission and surge live on the{' '}
             <a href="/pricing" className="font-medium text-aiko-green-600 hover:underline">
@@ -79,6 +92,92 @@ export function Settings() {
         </Card>
       </div>
     </>
+  );
+}
+
+/**
+ * `FARE_ROUNDING_STEP` and `ROAD_DISTANCE_FACTOR` — global, not per-vehicle,
+ * and shown on their own card for the same reason Pricing splits one card per
+ * vehicle type: two unrelated numbers editing through one shared draft state
+ * invites saving the one you did not mean to touch.
+ */
+function PlatformSettingsCard() {
+  const { data, isLoading, isError, error, refetch } = useGetPlatformSettingsManager();
+
+  return (
+    <Card>
+      <CardHeader
+        title="Pricing settings"
+        subtitle="Global, not per-vehicle — takes effect on the very next fare quote."
+      />
+
+      {isLoading ? (
+        <Spinner />
+      ) : isError ? (
+        <div className="space-y-2">
+          <p className="text-sm text-red-600">{error?.message ?? 'Could not load settings.'}</p>
+          <Button variant="ghost" onClick={() => void refetch()}>
+            Retry
+          </Button>
+        </div>
+      ) : !data?.length ? (
+        <p className="text-sm text-aiko-dark-500">No platform settings found.</p>
+      ) : (
+        <div className="space-y-4">
+          {data.map((setting) => (
+            <SettingRow key={setting.key} setting={setting} />
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function SettingRow({ setting }: { setting: PlatformSetting }) {
+  const [draft, setDraft] = useState('');
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const { updateSetting, isLoading: saving } = UpdatePlatformSettingManager();
+
+  const dirty = draft !== '' && Number(draft) !== setting.value;
+
+  async function save() {
+    setSaveError(null);
+    try {
+      await updateSetting({ key: setting.key, value: Number(draft) });
+      setDraft('');
+    } catch (e) {
+      setSaveError(parseApiError(e));
+    }
+  }
+
+  return (
+    <div className="rounded-lg border border-aiko-dark-100 p-3 dark:border-aiko-dark-800">
+      <div className="flex items-center justify-between gap-2">
+        <code className="text-xs font-medium text-aiko-dark-700 dark:text-aiko-dark-200">
+          {setting.key}
+        </code>
+        {setting.updatedAt ? (
+          <Badge tone="neutral">Changed {dateTime(setting.updatedAt)}</Badge>
+        ) : null}
+      </div>
+      <p className="mt-1 text-xs text-aiko-dark-500">{setting.description}</p>
+
+      <div className="mt-2 flex items-center gap-2">
+        <Input
+          type="number"
+          step="0.01"
+          className="max-w-[10rem]"
+          value={draft}
+          placeholder={String(setting.value)}
+          onChange={(event) => setDraft(event.target.value)}
+        />
+        <Button loading={saving} disabled={!dirty} onClick={() => void save()}>
+          Save
+        </Button>
+      </div>
+
+      {saveError ? <p className="mt-2 text-sm text-red-600">{saveError}</p> : null}
+    </div>
   );
 }
 

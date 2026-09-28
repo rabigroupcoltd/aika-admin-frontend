@@ -2,69 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import AxiosWithToken from '@/constants/api_management/MyHttpHelperWithToken';
 import useApiManager, { omitKeys, type ApiResponse } from '@/constants/mainController';
 import { parseApiError } from '@/utils/parseApiError';
-import type { UserSummary, VehicleType } from '@/modules/orders/ordersController';
-
-// ============================================
-// TypeScript Interfaces
-// ============================================
-
-export type KycStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
-
-export interface DriverWallet {
-  driverId: string;
-  availableBalance: number;
-  pendingBalance: number;
-  totalEarned: number;
-  totalWithdrawn: number;
-  currency: string;
-}
-
-export interface Driver {
-  id: string;
-  userId: string;
-  vehicleType: VehicleType;
-  vehiclePlate: string | null;
-  vehicleModel: string | null;
-  vehicleColor: string | null;
-  kycStatus: KycStatus;
-  kycRejectionReason?: string | null;
-  isAvailable: boolean;
-  isBlocked: boolean;
-  /** Cash fares owed to the platform. Past `debtLimit` the driver is blocked. */
-  currentDebt: number;
-  debtLimit: number;
-  rating?: number | null;
-  totalTrips?: number;
-  createdAt: string;
-  user?: UserSummary;
-  wallet?: DriverWallet | null;
-}
-
-export interface DriverFilterParams {
-  vehicleType?: string;
-  kycStatus?: KycStatus | '';
-  isAvailable?: boolean;
-}
-
-export interface RejectKycVariables {
-  id: string;
-  reason: string;
-}
-
-export interface BlockDriverVariables {
-  id: string;
-  isBlocked: boolean;
-}
-
-export interface PayDebtVariables {
-  id: string;
-  amount: number;
-}
-
-export interface DebtLimitVariables {
-  id: string;
-  debtLimit: number;
-}
+import type {
+  BlockDriverVariables,
+  DebtLimitVariables,
+  Driver,
+  DriverFilterParams,
+  PayDebtVariables,
+  RejectKycVariables,
+} from './type';
 
 export const DRIVERS_QUERY_KEY = 'drivers';
 

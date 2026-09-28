@@ -14,7 +14,8 @@ import {
   Th,
 } from '@/components/ui';
 import { dateTime, humanise, money, orderTone } from '@/lib/format';
-import { useGetOrdersManager, type OrderStatus } from '@/modules/orders/ordersController';
+import { useGetOrdersManager } from '@/modules/orders/ordersController';
+import type { OrderStatus } from '@/modules/orders/type';
 
 /**
  * Statuses worth filtering by, in the order an operator thinks about them.

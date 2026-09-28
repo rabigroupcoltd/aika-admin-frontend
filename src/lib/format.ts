@@ -1,6 +1,6 @@
-import type { KycStatus } from '@/modules/drivers/driversController';
-import type { OrderStatus } from '@/modules/orders/ordersController';
-import type { SupportPriority, SupportStatus } from '@/modules/support/supportController';
+import type { KycStatus } from '@/modules/drivers/type';
+import type { OrderStatus } from '@/modules/orders/type';
+import type { SupportPriority, SupportStatus } from '@/modules/support/type';
 
 /**
  * Money, as Nigerians write it.

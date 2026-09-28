@@ -1,27 +1,10 @@
-import useApiManager from '@/constants/mainController';
+import { useQuery } from '@tanstack/react-query';
+import AxiosWithToken, { getToken } from '@/constants/api_management/MyHttpHelperWithToken';
+import useApiManager, { type ApiResponse } from '@/constants/mainController';
+import { parseApiError } from '@/utils/parseApiError';
+import type { CurrentAdmin, SignInPayload, SignInResult } from './type';
 
-// ============================================
-// TypeScript Interfaces
-// ============================================
-
-export interface AdminUser {
-  id: string;
-  name: string | null;
-  email: string | null;
-  phone: string | null;
-  photoUrl?: string | null;
-  roles: string[];
-}
-
-export interface SignInPayload {
-  email: string;
-  password: string;
-}
-
-export interface SignInResult {
-  accessToken: string;
-  user: AdminUser;
-}
+export const AUTH_QUERY_KEY = 'auth';
 
 // ============================================
 // MUTATION CONTROLLERS
@@ -58,4 +41,33 @@ export const SignInManager = () => {
   };
 
   return { signIn, data, isLoading, isSuccess, isError, error };
+};
+
+// ============================================
+// QUERY CONTROLLERS
+// ============================================
+
+/**
+ * The signed-in staff member, for role gating.
+ *
+ * Deliberately a live call rather than trusting whatever `Login.tsx` stored at
+ * sign-in time — a role change (ADMIN promoting someone to SUPPORT, or the
+ * reverse) has to be reflected the next time the sidebar renders, not at the
+ * next sign-in. Called from `AppLayout` and deduped by React Query wherever
+ * else it is called, the same way the dashboard summary already is.
+ */
+export const useGetCurrentAdminManager = () => {
+  return useQuery({
+    queryKey: [AUTH_QUERY_KEY, 'profile'],
+    queryFn: async () => {
+      try {
+        const response = await AxiosWithToken.get<ApiResponse<CurrentAdmin>>('/auth/profile');
+        return response.data.data;
+      } catch (error) {
+        throw new Error(parseApiError(error));
+      }
+    },
+    enabled: Boolean(getToken()),
+    staleTime: 60_000,
+  });
 };

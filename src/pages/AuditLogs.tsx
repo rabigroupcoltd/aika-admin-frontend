@@ -18,8 +18,8 @@ import {
   AUDIT_ENTITIES,
   useGetAuditActionsManager,
   useGetAuditLogsManager,
-  type AuditEntity,
 } from '@/modules/audit/auditController';
+import type { AuditEntity } from '@/modules/audit/type';
 
 /**
  * The admin audit trail.

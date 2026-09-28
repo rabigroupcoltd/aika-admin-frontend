@@ -14,7 +14,8 @@ import {
   Th,
 } from '@/components/ui';
 import { kycTone, money, shortDate } from '@/lib/format';
-import { useGetDriversManager, type KycStatus } from '@/modules/drivers/driversController';
+import { useGetDriversManager } from '@/modules/drivers/driversController';
+import type { KycStatus } from '@/modules/drivers/type';
 
 export function Drivers() {
   const [kycStatus, setKycStatus] = useState<KycStatus | ''>('');

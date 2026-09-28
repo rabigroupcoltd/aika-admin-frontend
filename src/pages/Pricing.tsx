@@ -14,8 +14,8 @@ import { dateTime, money } from '@/lib/format';
 import {
   UpdatePricingRuleManager,
   useGetPricingRulesManager,
-  type PricingRule,
 } from '@/modules/pricing/pricingController';
+import type { PricingRule } from '@/modules/pricing/type';
 import { parseApiError } from '@/utils/parseApiError';
 
 /** The editable numbers, with what each one actually does to a fare. */

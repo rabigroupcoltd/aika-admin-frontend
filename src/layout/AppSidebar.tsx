@@ -22,6 +22,8 @@ interface NavItem {
   icon: ComponentType<{ className?: string }>;
   /** Rendered as a count pill — open tickets, drivers awaiting KYC. */
   badge?: number;
+  /** Hidden from SUPPORT — pricing, wallets, settings, audit, KYC approval. */
+  adminOnly?: boolean;
 }
 
 interface NavSection {
@@ -44,25 +46,25 @@ function sections(counts: { pendingKyc?: number; openTickets?: number }): NavSec
         { to: '/', label: 'Dashboard', icon: LayoutDashboard },
         { to: '/orders', label: 'Orders', icon: Package },
         { to: '/drivers', label: 'Drivers', icon: Bike },
-        { to: '/kyc', label: 'KYC Approvals', icon: CheckCircle2, badge: counts.pendingKyc },
+        { to: '/kyc', label: 'KYC Approvals', icon: CheckCircle2, badge: counts.pendingKyc, adminOnly: true },
         { to: '/users', label: 'Users', icon: Users },
       ],
     },
     {
       heading: 'Money',
       items: [
-        { to: '/financials', label: 'Financials', icon: BarChart3 },
-        { to: '/wallets', label: 'Wallets & Payouts', icon: Wallet },
-        { to: '/pricing', label: 'Pricing & Rate Card', icon: Tag },
+        { to: '/financials', label: 'Financials', icon: BarChart3, adminOnly: true },
+        { to: '/wallets', label: 'Wallets & Payouts', icon: Wallet, adminOnly: true },
+        { to: '/pricing', label: 'Pricing & Rate Card', icon: Tag, adminOnly: true },
       ],
     },
     {
       heading: 'Platform',
       items: [
         { to: '/support', label: 'Support', icon: LifeBuoy, badge: counts.openTickets },
-        { to: '/dispatch', label: 'Dispatch Activity', icon: RadioTower },
-        { to: '/audit', label: 'Audit Logs', icon: FileText },
-        { to: '/settings', label: 'Settings', icon: Settings },
+        { to: '/dispatch', label: 'Dispatch Activity', icon: RadioTower, adminOnly: true },
+        { to: '/audit', label: 'Audit Logs', icon: FileText, adminOnly: true },
+        { to: '/settings', label: 'Settings', icon: Settings, adminOnly: true },
       ],
     },
   ];
@@ -70,11 +72,21 @@ function sections(counts: { pendingKyc?: number; openTickets?: number }): NavSec
 
 export function AppSidebar({
   open,
+  isAdmin,
   counts,
 }: {
   open: boolean;
+  /** SUPPORT gets the same sections with the admin-only items filtered out, not a different layout. */
+  isAdmin: boolean;
   counts: { pendingKyc?: number; openTickets?: number };
 }) {
+  const visibleSections = sections(counts)
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => isAdmin || !item.adminOnly),
+    }))
+    .filter((section) => section.items.length > 0);
+
   return (
     <aside
       className={cn(
@@ -96,7 +108,7 @@ export function AppSidebar({
       </div>
 
       <nav className="h-[calc(100%-4rem)] space-y-6 overflow-y-auto px-3 py-5">
-        {sections(counts).map((section) => (
+        {visibleSections.map((section) => (
           <div key={section.heading}>
             <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-aiko-dark-400">
               {section.heading}
