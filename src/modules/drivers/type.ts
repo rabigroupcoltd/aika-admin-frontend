@@ -25,6 +25,8 @@ export interface Driver {
   userId: string;
   vehicleType: VehicleType;
   vehiclePlate: string | null;
+  /** The make — Bajaj, TVS… Null on drivers registered before it was asked. */
+  vehicleBrand: string | null;
   vehicleModel: string | null;
   vehicleColor: string | null;
   kycStatus: KycStatus;

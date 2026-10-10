@@ -4,12 +4,13 @@ import type { UserOverview } from '@/modules/users/type';
 import { KycApprovalCard } from '../../DriverDetail/components/KycApprovalCard';
 import { KycRejectionCard } from '../../DriverDetail/components/KycRejectionCard';
 
-const DOCUMENT_TYPES = ['DRIVER_LICENSE', 'NATIONAL_ID', 'PLATE_NUMBER'];
+const DOCUMENT_TYPES = ['DRIVER_LICENSE', 'NATIONAL_ID', 'FRONT', 'PLATE_NUMBER'];
 
 const DOCUMENT_LABEL: Record<string, string> = {
   DRIVER_LICENSE: "Driver's licence",
   NATIONAL_ID: 'National ID',
-  PLATE_NUMBER: 'Plate number',
+  FRONT: 'Vehicle photo',
+  PLATE_NUMBER: 'Plate close-up',
 };
 
 interface VerificationTabProps {
@@ -68,7 +69,7 @@ export function VerificationTab({
         </p>
       ) : null}
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <DocumentTile label="Selfie (from sign-up)" url={user.profilePhotoUrl} />
         {DOCUMENT_TYPES.map((type) => (
           <DocumentTile
@@ -89,7 +90,8 @@ export function VerificationTab({
       <dl className="grid gap-2 rounded-lg bg-aiko-dark-50 p-4 text-sm sm:grid-cols-2 dark:bg-aiko-dark-800/60">
         <Field label="Vehicle" value={humanise(driver.vehicleType)} />
         <Field label="Plate" value={driver.vehiclePlate ?? '—'} />
-        <Field label="Make & model" value={driver.vehicleModel ?? '—'} />
+        <Field label="Brand" value={driver.vehicleBrand ?? '—'} />
+        <Field label="Model" value={driver.vehicleModel ?? '—'} />
         <Field label="Colour" value={driver.vehicleColor ?? '—'} />
       </dl>
 

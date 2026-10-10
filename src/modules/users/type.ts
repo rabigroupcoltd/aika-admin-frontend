@@ -46,6 +46,7 @@ export interface DirectoryDriver {
   kycRejectionReason: string | null;
   vehicleType: string;
   vehiclePlate: string | null;
+  vehicleBrand: string | null;
   vehicleModel: string | null;
   isAvailable: boolean;
   isBlocked: boolean;

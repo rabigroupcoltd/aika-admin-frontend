@@ -13,7 +13,8 @@ export function VehicleTab({ user }: { user: UserOverview }) {
   const rows = [
     { label: 'Type', value: humanise(driver.vehicleType) },
     { label: 'Plate', value: driver.vehiclePlate ?? '—' },
-    { label: 'Make & model', value: driver.vehicleModel ?? '—' },
+    { label: 'Brand', value: driver.vehicleBrand ?? '—' },
+    { label: 'Model', value: driver.vehicleModel ?? '—' },
     { label: 'Colour', value: driver.vehicleColor ?? '—' },
     { label: 'Year', value: driver.vehicleYear ? String(driver.vehicleYear) : '—' },
     { label: 'Trips completed', value: String(driver.totalTrips ?? 0) },

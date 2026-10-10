@@ -114,7 +114,7 @@ export function KycApprovals() {
               <dl className="mb-4 space-y-1 text-sm">
                 <Row label="Vehicle" value={driver.vehicleType} />
                 <Row label="Plate" value={driver.vehiclePlate ?? '—'} />
-                <Row label="Model" value={driver.vehicleModel ?? '—'} />
+                <Row label="Vehicle" value={[driver.vehicleBrand, driver.vehicleModel].filter(Boolean).join(' ') || '—'} />
                 <Row label="Applied" value={shortDate(driver.createdAt)} />
               </dl>
 

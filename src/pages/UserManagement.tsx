@@ -319,7 +319,7 @@ function UserRow({
           <Td className="hidden lg:table-cell">
             {user.driver ? (
               <>
-                <p className="text-sm">{user.driver.vehicleModel ?? user.driver.vehicleType}</p>
+                <p className="text-sm">{[user.driver.vehicleBrand, user.driver.vehicleModel].filter(Boolean).join(' ') || user.driver.vehicleType}</p>
                 <p className="text-xs text-aiko-dark-500">{user.driver.vehiclePlate ?? '—'}</p>
               </>
             ) : (
