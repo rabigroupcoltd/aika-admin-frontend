@@ -187,7 +187,7 @@ const STAFF_ROLE_OPTIONS: { value: StaffRole; label: string }[] = [
   { value: 'ADMIN', label: 'Admin — everything' },
 ];
 
-function CreateStaffCard({ onDone }: { onDone: () => void }) {
+export function CreateStaffCard({ onDone }: { onDone: () => void }) {
   const { createStaff, isLoading } = CreateStaffManager();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
