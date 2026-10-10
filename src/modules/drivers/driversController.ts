@@ -7,6 +7,7 @@ import type {
   DebtLimitVariables,
   Driver,
   DriverFilterParams,
+  IncompleteApplication,
   PayDebtVariables,
   RejectKycVariables,
 } from './type';
@@ -69,6 +70,28 @@ export const useGetDriverByIdManager = ({
       }
     },
     enabled: enabled && Boolean(driverId),
+    refetchOnWindowFocus: false,
+  });
+};
+
+/**
+ * Riders who chose to drive but never submitted their vehicle — they have no
+ * driver profile yet, so nothing to approve, and would otherwise be invisible.
+ */
+export const useGetIncompleteApplicationsManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  return useQuery({
+    queryKey: [DRIVERS_QUERY_KEY, 'incomplete-applications'],
+    queryFn: async () => {
+      try {
+        const response = await AxiosWithToken.get<ApiResponse<IncompleteApplication[]>>(
+          '/drivers/applications/incomplete',
+        );
+        return response.data.data;
+      } catch (error) {
+        throw new Error(parseApiError(error));
+      }
+    },
+    enabled,
     refetchOnWindowFocus: false,
   });
 };

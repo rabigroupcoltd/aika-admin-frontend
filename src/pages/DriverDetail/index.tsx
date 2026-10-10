@@ -93,6 +93,7 @@ export function DriverDetail() {
           <div className="flex gap-2">
             <Badge tone={kycTone(driver.kycStatus)}>{driver.kycStatus}</Badge>
             {driver.isBlocked ? <Badge tone="red">Blocked</Badge> : null}
+            {driver.debt?.locked ? <Badge tone="amber">Debt limit reached</Badge> : null}
           </div>
         }
       />

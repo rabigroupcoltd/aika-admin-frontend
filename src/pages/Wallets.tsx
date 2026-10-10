@@ -14,6 +14,7 @@ import {
   Th,
 } from '@/components/ui';
 import { money } from '@/lib/format';
+import { debtHeadroom, debtLimitOf, isDebtLocked } from '@/modules/drivers/debt';
 import { useGetDriversManager } from '@/modules/drivers/driversController';
 import { useGetAllWalletsManager } from '@/modules/wallet/walletController';
 
@@ -84,7 +85,7 @@ function DebtExposureView() {
     // Most exposed first — debt as a share of the limit, not the raw figure, so
     // a driver on a small limit is not buried under one on a large one.
     return [...list].sort(
-      (a, b) => b.currentDebt / (b.debtLimit || 1) - a.currentDebt / (a.debtLimit || 1),
+      (a, b) => b.currentDebt / (debtLimitOf(b) || 1) - a.currentDebt / (debtLimitOf(a) || 1),
     );
   }, [data, search, onlyOwing]);
 
@@ -93,7 +94,7 @@ function DebtExposureView() {
     return {
       outstanding: list.reduce((sum, driver) => sum + driver.currentDebt, 0),
       owing: list.filter((driver) => driver.currentDebt > 0).length,
-      overLimit: list.filter((driver) => driver.currentDebt >= driver.debtLimit).length,
+      overLimit: list.filter(isDebtLocked).length,
     };
   }, [data]);
 
@@ -168,7 +169,8 @@ function DebtExposureView() {
             </thead>
             <tbody>
               {rows.map((driver) => {
-                const headroom = driver.debtLimit - driver.currentDebt;
+                const headroom = debtHeadroom(driver);
+                const limit = debtLimitOf(driver);
                 return (
                   <tr
                     key={driver.id}
@@ -178,15 +180,18 @@ function DebtExposureView() {
                       <p className="text-xs text-aiko-dark-500">{driver.user?.phone ?? '—'}</p>
                     </Td>
                     <Td className="font-medium">{money(driver.currentDebt)}</Td>
-                    <Td className="text-aiko-dark-500">{money(driver.debtLimit)}</Td>
-                    <Td className={headroom <= 0 ? 'font-medium text-red-600' : undefined}>
-                      {money(headroom)}
+                    <Td className="text-aiko-dark-500">{limit > 0 ? money(limit) : 'No limit'}</Td>
+                    <Td
+                      className={
+                        headroom !== null && headroom <= 0 ? 'font-medium text-red-600' : undefined
+                      }>
+                      {headroom === null ? '—' : money(headroom)}
                     </Td>
                     <Td>
                       {driver.isBlocked ? (
                         <Badge tone="red">Blocked</Badge>
-                      ) : headroom <= 0 ? (
-                        <Badge tone="amber">At limit</Badge>
+                      ) : isDebtLocked(driver) ? (
+                        <Badge tone="amber">At limit — can't take trips</Badge>
                       ) : (
                         <Badge tone="green">Clear</Badge>
                       )}

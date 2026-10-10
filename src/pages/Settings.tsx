@@ -72,9 +72,9 @@ export function Settings() {
         <PlatformSettingsCard />
 
         <Card>
-          <CardHeader title="Pricing" subtitle="Per-vehicle rate cards." />
+          <CardHeader title="Commission & pricing" subtitle="Per-vehicle rate cards." />
           <p className="text-sm text-aiko-dark-600 dark:text-aiko-dark-300">
-            Fares, platform commission and surge live on the{' '}
+            The commission percentage taken from each trip, fares and surge are set per vehicle on the{' '}
             <a href="/pricing" className="font-medium text-aiko-green-600 hover:underline">
               Pricing &amp; Rate Card
             </a>{' '}
@@ -107,8 +107,8 @@ function PlatformSettingsCard() {
   return (
     <Card>
       <CardHeader
-        title="Pricing settings"
-        subtitle="Global, not per-vehicle — takes effect on the very next fare quote."
+        title="Platform settings"
+        subtitle="Global, not per-vehicle — each takes effect immediately."
       />
 
       {isLoading ? (
@@ -153,9 +153,14 @@ function SettingRow({ setting }: { setting: PlatformSetting }) {
   return (
     <div className="rounded-lg border border-aiko-dark-100 p-3 dark:border-aiko-dark-800">
       <div className="flex items-center justify-between gap-2">
-        <code className="text-xs font-medium text-aiko-dark-700 dark:text-aiko-dark-200">
-          {setting.key}
-        </code>
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-aiko-dark-900 dark:text-white">
+            {setting.label ?? setting.key}
+          </p>
+          <p className="text-xs text-aiko-dark-500">
+            Current: <span className="font-medium">{setting.value.toLocaleString()}</span>
+          </p>
+        </div>
         {setting.updatedAt ? (
           <Badge tone="neutral">Changed {dateTime(setting.updatedAt)}</Badge>
         ) : null}
@@ -166,6 +171,7 @@ function SettingRow({ setting }: { setting: PlatformSetting }) {
         <Input
           type="number"
           step="0.01"
+          min={setting.min}
           className="max-w-[10rem]"
           value={draft}
           placeholder={String(setting.value)}

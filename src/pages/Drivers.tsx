@@ -14,6 +14,7 @@ import {
   Th,
 } from '@/components/ui';
 import { kycTone, money, shortDate } from '@/lib/format';
+import { debtLimitOf, isDebtLocked } from '@/modules/drivers/debt';
 import { useGetDriversManager } from '@/modules/drivers/driversController';
 import type { KycStatus } from '@/modules/drivers/type';
 
@@ -119,6 +120,8 @@ export function Drivers() {
                   <Td>
                     {driver.isBlocked ? (
                       <Badge tone="red">Blocked</Badge>
+                    ) : isDebtLocked(driver) ? (
+                      <Badge tone="amber">Debt limit</Badge>
                     ) : driver.isAvailable ? (
                       <Badge tone="green">Online</Badge>
                     ) : (
@@ -127,14 +130,15 @@ export function Drivers() {
                   </Td>
                   <Td>
                     <span
-                      className={
-                        driver.currentDebt >= driver.debtLimit
-                          ? 'font-medium text-red-600'
-                          : undefined
-                      }>
+                      className={isDebtLocked(driver) ? 'font-medium text-red-600' : undefined}>
                       {money(driver.currentDebt)}
                     </span>
-                    <span className="text-xs text-aiko-dark-500"> / {money(driver.debtLimit)}</span>
+                    {debtLimitOf(driver) > 0 ? (
+                      <span className="text-xs text-aiko-dark-500">
+                        {' '}
+                        / {money(debtLimitOf(driver))}
+                      </span>
+                    ) : null}
                   </Td>
                   <Td className="whitespace-nowrap text-xs text-aiko-dark-500">
                     {shortDate(driver.createdAt)}

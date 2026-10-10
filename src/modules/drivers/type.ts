@@ -31,14 +31,49 @@ export interface Driver {
   kycRejectionReason?: string | null;
   isAvailable: boolean;
   isBlocked: boolean;
-  /** Cash fares owed to the platform. Past `debtLimit` the driver is blocked. */
+  /** Commission owed to the platform from cash trips. */
   currentDebt: number;
-  debtLimit: number;
+  /** This driver's own limit, or null when they follow the platform setting. */
+  debtLimit: number | null;
+  /** Derived server-side: the limit in force and whether it has been reached. */
+  debt?: DriverDebtStatus;
   rating?: number | null;
   totalTrips?: number;
   createdAt: string;
   user?: UserSummary;
   wallet?: DriverWallet | null;
+  /** Documents and vehicle shots uploaded at registration. */
+  vehiclePhotos?: VehiclePhoto[];
+}
+
+export interface VehiclePhoto {
+  id: string;
+  /** FRONT, BACK, PLATE_NUMBER, LICENSE, … — whatever the app labelled it. */
+  type: string;
+  url: string;
+}
+
+export interface DriverDebtStatus {
+  current: number;
+  /** The limit in force. 0 means no limit. */
+  limit: number;
+  /** True when the limit is this driver's own rather than the platform default. */
+  isOverride: boolean;
+  /** At or over the limit: cannot go online or take new orders. */
+  locked: boolean;
+  remaining: number | null;
+}
+
+/** A rider who chose to drive but never submitted their vehicle. */
+export interface IncompleteApplication {
+  id: string;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  profilePhotoUrl: string | null;
+  onboardingStep: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface DriverFilterParams {
@@ -64,5 +99,6 @@ export interface PayDebtVariables {
 
 export interface DebtLimitVariables {
   id: string;
-  debtLimit: number;
+  /** null resets the driver to the platform default. */
+  debtLimit: number | null;
 }

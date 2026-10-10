@@ -4,7 +4,11 @@
  */
 export interface PlatformSetting {
   key: string;
+  /** Human name for the setting. */
+  label?: string;
   value: number;
+  /** Lowest value the server accepts. */
+  min?: number;
   description: string;
   updatedAt: string | null;
 }
