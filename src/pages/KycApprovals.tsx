@@ -164,7 +164,7 @@ export function KycApprovals() {
               )}
 
               <Link
-                to={`/drivers/${driver.id}`}
+                to={`/users/${driver.userId}?t=verification`}
                 className="mt-3 block text-center text-sm text-aiko-green-600 hover:underline">
                 See full profile →
               </Link>

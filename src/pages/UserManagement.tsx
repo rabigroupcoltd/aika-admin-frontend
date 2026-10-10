@@ -24,7 +24,7 @@ import {
   useGetUserDirectoryManager,
 } from '@/modules/users/usersController';
 import type { DirectoryType, DirectoryUser, DriverApproval } from '@/modules/users/type';
-import { CreateStaffCard } from '@/pages/Users';
+import { CreateStaffCard } from '@/components/CreateStaffCard';
 import { parseApiError } from '@/utils/parseApiError';
 
 const TABS: { key: DirectoryType; label: string; param: string }[] = [

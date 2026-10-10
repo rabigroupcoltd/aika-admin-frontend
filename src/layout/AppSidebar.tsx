@@ -1,6 +1,5 @@
 import {
   BarChart3,
-  Bike,
   CheckCircle2,
   FileText,
   LayoutDashboard,
@@ -45,9 +44,8 @@ function sections(counts: { pendingKyc?: number; openTickets?: number }): NavSec
       items: [
         { to: '/', label: 'Dashboard', icon: LayoutDashboard },
         { to: '/orders', label: 'Orders', icon: Package },
-        { to: '/drivers', label: 'Drivers', icon: Bike },
         { to: '/kyc', label: 'KYC Approvals', icon: CheckCircle2, badge: counts.pendingKyc, adminOnly: true },
-        { to: '/users', label: 'Users', icon: Users },
+        { to: '/users', label: 'User Management', icon: Users },
       ],
     },
     {

@@ -4,8 +4,7 @@ import { AppLayout } from '@/layout/AppLayout';
 import { AuditLogs } from '@/pages/AuditLogs';
 import { Dashboard } from '@/pages/Dashboard';
 import { DispatchActivity } from '@/pages/DispatchActivity';
-import { DriverDetail } from '@/pages/DriverDetail';
-import { Drivers } from '@/pages/Drivers';
+import { DriverRedirect } from '@/pages/DriverRedirect';
 import { Financials } from '@/pages/Financials';
 import { KycApprovals } from '@/pages/KycApprovals';
 import { Login } from '@/pages/Login';
@@ -15,7 +14,8 @@ import { Pricing } from '@/pages/Pricing';
 import { Settings } from '@/pages/Settings';
 import { Support } from '@/pages/Support';
 import { SupportDetail } from '@/pages/SupportDetail';
-import { Users } from '@/pages/Users';
+import { UserDetail } from '@/pages/UserDetail';
+import { UserManagement } from '@/pages/UserManagement';
 import { Wallets } from '@/pages/Wallets';
 import { CustomToastContainer } from '@/components/CustomToastContainer';
 import { getToken } from '@/constants/api_management/MyHttpHelperWithToken';
@@ -64,10 +64,12 @@ export function App() {
 
               <Route path="orders" element={<Orders />} />
               <Route path="orders/:id" element={<OrderDetail />} />
-              <Route path="drivers" element={<Drivers />} />
-              <Route path="drivers/:id" element={<DriverDetail />} />
+              {/* Drivers live under user management now; old links still land. */}
+              <Route path="drivers" element={<Navigate to="/users?tab=drivers" replace />} />
+              <Route path="drivers/:id" element={<DriverRedirect />} />
               <Route path="kyc" element={<KycApprovals />} />
-              <Route path="users" element={<Users />} />
+              <Route path="users" element={<UserManagement />} />
+              <Route path="users/:id" element={<UserDetail />} />
 
               <Route path="financials" element={<Financials />} />
               <Route path="wallets" element={<Wallets />} />
