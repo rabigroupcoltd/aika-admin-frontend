@@ -15,27 +15,23 @@ import {
 } from '@/components/ui';
 import { kycTone, money, shortDate } from '@/lib/format';
 import { debtLimitOf, isDebtLocked } from '@/modules/drivers/debt';
-import { useGetDriversManager } from '@/modules/drivers/driversController';
+import {
+  useGetDriversManager,
+  useGetIncompleteApplicationsManager,
+} from '@/modules/drivers/driversController';
 import type { KycStatus } from '@/modules/drivers/type';
 
 export function Drivers() {
   const [kycStatus, setKycStatus] = useState<KycStatus | ''>('');
   const [vehicleType, setVehicleType] = useState('');
   const [search, setSearch] = useState('');
+  const { data: incomplete } = useGetIncompleteApplicationsManager();
 
   const { data, isLoading, isError, error, refetch } = useGetDriversManager({
     kycStatus: kycStatus || undefined,
     vehicleType: vehicleType || undefined,
   });
 
-  /**
-   * Name and plate search is client-side.
-   *
-   * The endpoint returns the whole filtered set in one array with no `q`
-   * parameter, and at pilot scale that is a few hundred rows — filtering here
-   * is instant and avoids adding a server-side search that nothing else needs
-   * yet. Worth moving server-side once the fleet outgrows one response.
-   */
   const rows = useMemo(() => {
     const list = data ?? [];
     const term = search.trim().toLowerCase();
@@ -77,6 +73,18 @@ export function Drivers() {
           </div>
         }
       />
+
+      {incomplete?.length ? (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">
+          <span>
+            {incomplete.length} rider{incomplete.length > 1 ? 's have' : ' has'} started signing up
+            but not submitted their documents yet, so they are not listed here.
+          </span>
+          <Link to="/kyc" className="font-medium underline">
+            See who
+          </Link>
+        </div>
+      ) : null}
 
       <Card padded={false}>
         {isLoading ? (

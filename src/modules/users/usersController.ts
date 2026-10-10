@@ -2,7 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import AxiosWithToken from '@/constants/api_management/MyHttpHelperWithToken';
 import useApiManager, { omitKeys, type ApiResponse } from '@/constants/mainController';
 import { parseApiError } from '@/utils/parseApiError';
-import type { AppUser, BlockUserVariables, CreateStaffVariables } from './type';
+import type {
+  AppUser,
+  BlockUserVariables,
+  CreateStaffVariables,
+  DirectoryParams,
+  DirectoryResponse,
+  UserOverview,
+} from './type';
 
 export const USERS_QUERY_KEY = 'users';
 
@@ -29,6 +36,60 @@ export const useGetUsersManager = ({ enabled = true }: { enabled?: boolean } = {
       }
     },
     enabled,
+    refetchOnWindowFocus: false,
+  });
+};
+
+/** One user-management tab: passengers, drivers (submitted or not) or staff. */
+export const useGetUserDirectoryManager = ({
+  type,
+  search,
+  approval,
+  enabled = true,
+}: DirectoryParams & { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: [USERS_QUERY_KEY, 'directory', type, search ?? '', approval ?? ''],
+    queryFn: async () => {
+      try {
+        const response = await AxiosWithToken.get<ApiResponse<DirectoryResponse>>('/users/directory', {
+          params: {
+            type,
+            ...(search?.trim() && { search: search.trim() }),
+            ...(approval && { approval }),
+          },
+        });
+        return response.data.data;
+      } catch (error) {
+        throw new Error(parseApiError(error));
+      }
+    },
+    enabled,
+    placeholderData: (previous) => previous,
+    refetchOnWindowFocus: false,
+  });
+};
+
+/** Everything on the user detail page: account, driver profile, documents, totals. */
+export const useGetUserOverviewManager = ({
+  userId,
+  enabled = true,
+}: {
+  userId: string;
+  enabled?: boolean;
+}) => {
+  return useQuery({
+    queryKey: [USERS_QUERY_KEY, 'overview', userId],
+    queryFn: async () => {
+      try {
+        const response = await AxiosWithToken.get<ApiResponse<UserOverview>>(
+          `/users/${userId}/overview`,
+        );
+        return response.data.data;
+      } catch (error) {
+        throw new Error(parseApiError(error));
+      }
+    },
+    enabled: enabled && Boolean(userId),
     refetchOnWindowFocus: false,
   });
 };

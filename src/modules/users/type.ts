@@ -32,3 +32,78 @@ export interface CreateStaffVariables {
   name: string;
   role: StaffRole;
 }
+
+// ------------------------------------------------------- user management
+
+export type DirectoryType = 'PASSENGER' | 'DRIVER' | 'STAFF';
+
+/** Where a would-be driver is with approval. NOT_SUBMITTED = chose to drive, never sent documents. */
+export type DriverApproval = 'NOT_SUBMITTED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export interface DirectoryDriver {
+  id: string;
+  kycStatus: Exclude<DriverApproval, 'NOT_SUBMITTED'>;
+  kycRejectionReason: string | null;
+  vehicleType: string;
+  vehiclePlate: string | null;
+  vehicleModel: string | null;
+  isAvailable: boolean;
+  isBlocked: boolean;
+  currentDebt: number;
+  debtLimit: number | null;
+  rating: number;
+  totalTrips: number;
+  createdAt: string;
+  debt: import('@/modules/drivers/type').DriverDebtStatus;
+}
+
+export interface DirectoryUser extends AppUser {
+  accountType: 'PASSENGER' | 'RIDER' | null;
+  onboardingStep: string;
+  lastLoginAt: string | null;
+  updatedAt: string;
+  passengerTrips: number;
+  driverStatus: DriverApproval | null;
+  driver: DirectoryDriver | null;
+}
+
+export interface DirectoryCounts {
+  passengers: number;
+  drivers: number;
+  staff: number;
+  pendingDrivers: number;
+  notSubmitted: number;
+}
+
+export interface DirectoryResponse {
+  counts: DirectoryCounts;
+  result: DirectoryUser[];
+}
+
+export interface DirectoryParams {
+  type: DirectoryType;
+  search?: string;
+  approval?: DriverApproval | '';
+}
+
+export interface UserOverview extends Omit<DirectoryUser, 'driver' | 'passengerTrips'> {
+  dob: string | null;
+  livenessPassedAt: string | null;
+  onboardingCompletedAt: string | null;
+  driver:
+    | (import('@/modules/drivers/type').Driver & {
+        vehicleYear: number | null;
+        kycRejectionReason: string | null;
+      })
+    | null;
+  stats: {
+    passenger: { trips: number; completed: number; spent: number };
+    driver: {
+      trips: number;
+      completed: number;
+      fares: number;
+      earnings: number;
+      commission: number;
+    } | null;
+  };
+}
