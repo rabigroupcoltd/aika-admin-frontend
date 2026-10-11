@@ -6,10 +6,6 @@ import { useGetOrdersManager } from '@/modules/orders/ordersController';
 
 const PAGE_SIZE = 10;
 
-/**
- * Trip history. A driver has two: trips they drove, and trips they booked as
- * a passenger — every driver is a passenger too — so they get a switch.
- */
 export function TripsTab({ userId, driverId }: { userId: string; driverId: string | null }) {
   const navigate = useNavigate();
   const [side, setSide] = useState<'driver' | 'passenger'>(driverId ? 'driver' : 'passenger');

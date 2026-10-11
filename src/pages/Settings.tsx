@@ -9,22 +9,6 @@ import {
 import type { PlatformSetting } from '@/modules/settings/type';
 import { parseApiError } from '@/utils/parseApiError';
 
-/**
- * Settings.
- *
- * Most of what the marketplace turns — search radius, capacity, detour
- * limits, heartbeat TTL — is still read from the environment at boot on the
- * server, so a form here could not change them without a deploy. Showing them
- * is still worth doing: an operator debugging "why did nobody get this
- * order" needs to know what the radius actually is.
- *
- * Per-vehicle pricing lives on its own screen because it is stored in the
- * database and genuinely is editable. The "Pricing settings" card below is
- * the same exception, one level up — two numbers every fare quote reads
- * (fare rounding, the road-distance fallback factor), also DB-backed via
- * `PlatformSetting`, also editable here, and taking effect on the very next
- * quote rather than needing a deploy.
- */
 export function Settings() {
   const { data, isLoading } = useGetAdminSummaryManager();
 
@@ -95,12 +79,6 @@ export function Settings() {
   );
 }
 
-/**
- * `FARE_ROUNDING_STEP` and `ROAD_DISTANCE_FACTOR` — global, not per-vehicle,
- * and shown on their own card for the same reason Pricing splits one card per
- * vehicle type: two unrelated numbers editing through one shared draft state
- * invites saving the one you did not mean to touch.
- */
 function PlatformSettingsCard() {
   const { data, isLoading, isError, error, refetch } = useGetPlatformSettingsManager();
 

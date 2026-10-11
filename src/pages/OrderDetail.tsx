@@ -16,7 +16,6 @@ import { useGetEntityHistoryManager } from '@/modules/audit/auditController';
 import { CancelOrderManager, useGetOrderByIdManager } from '@/modules/orders/ordersController';
 import { parseApiError } from '@/utils/parseApiError';
 
-/** Statuses past the point where cancelling is a sensible admin action. */
 const TERMINAL = ['DELIVERED', 'COMPLETED', 'CANCELLED', 'NO_DRIVER_FOUND'];
 
 export function OrderDetail() {
@@ -28,7 +27,6 @@ export function OrderDetail() {
     orderId: id,
   });
 
-  // The trail for this specific order — who touched it and why.
   const { data: history } = useGetEntityHistoryManager({ entity: 'ORDER', entityId: id });
 
   const { cancelOrder, isLoading: cancelling } = CancelOrderManager();
@@ -40,8 +38,6 @@ export function OrderDetail() {
       await cancelOrder({ id, reason: reason.trim() });
       setReason('');
     } catch (e) {
-      // useApiManager already raised a toast; this puts the same sentence next
-      // to the field that caused it.
       setCancelError(parseApiError(e));
     }
   }
@@ -174,8 +170,6 @@ export function OrderDetail() {
                 variant="danger"
                 className="mt-3 w-full"
                 loading={cancelling}
-                // Cancelling without a reason is what makes an order impossible
-                // to explain later, so it is not allowed here.
                 disabled={reason.trim().length < 3}
                 onClick={() => void handleCancel()}>
                 Cancel this order

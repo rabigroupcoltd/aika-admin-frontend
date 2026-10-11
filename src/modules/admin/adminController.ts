@@ -10,17 +10,6 @@ import type {
   VehicleSplit,
 } from './type';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
-/**
- * The dashboard's headline tiles.
- *
- * Also read by AppLayout for the sidebar badges, which is why the query key is
- * stable and the refetch interval lives at the call site — React Query dedupes
- * the two, so the layout and the dashboard share one request.
- */
 export const useGetAdminSummaryManager = ({
   enabled = true,
   refetchInterval,
@@ -41,7 +30,6 @@ export const useGetAdminSummaryManager = ({
   });
 };
 
-/** Orders and revenue per day. Empty days are zero-filled by the server. */
 export const useGetOrderTrendManager = ({
   days = 14,
   enabled = true,
@@ -80,7 +68,6 @@ export const useGetVehicleSplitManager = ({ enabled = true }: { enabled?: boolea
   });
 };
 
-/** Deliveries, cancellations, sign-ups and new tickets, newest first. */
 export const useGetActivityManager = ({
   limit = 20,
   enabled = true,
@@ -104,12 +91,6 @@ export const useGetActivityManager = ({
   });
 };
 
-/**
- * The live driver pool and every order still on the market.
- *
- * Polled rather than pushed: the admin has no socket, and an operator watching
- * this screen wants it current without a manual refresh.
- */
 export const useGetSocketActivityManager = ({
   enabled = true,
   refetchInterval = 10_000,

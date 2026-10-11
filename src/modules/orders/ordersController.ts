@@ -11,10 +11,6 @@ import { parseApiError } from '@/utils/parseApiError';
 
 export const ORDERS_QUERY_KEY = 'orders';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
 export const useGetOrdersManager = ({
   status,
   vehicleType,
@@ -70,17 +66,6 @@ export const useGetOrderByIdManager = ({
   });
 };
 
-// ============================================
-// MUTATION CONTROLLERS
-// ============================================
-
-/**
- * Cancel an order.
- *
- * The reason reaches both parties and is written to the audit trail, which is
- * why the screen refuses to send an empty one — an order nobody can explain
- * later is the one that turns into a dispute.
- */
 export const CancelOrderManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     Order,
@@ -89,7 +74,6 @@ export const CancelOrderManager = () => {
   >({
     endpoint: ({ id }: CancelOrderVariables) => `/orders/${id}/cancel`,
     getBody: omitKeys<CancelOrderVariables>('id'),
-    // The dashboard tiles count live orders, so they move too.
     queryKey: [ORDERS_QUERY_KEY],
     method: 'POST',
     showSuccessToast: true,

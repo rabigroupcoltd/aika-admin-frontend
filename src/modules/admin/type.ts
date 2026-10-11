@@ -6,14 +6,12 @@ export interface AdminSummary {
     yesterday: number;
     week: number;
     total: number;
-    /** Signed, one decimal place. Null when yesterday was zero. */
     changePercent: string | null;
   };
   revenue: { today: number; week: number; total: number; currency: string };
   drivers: {
     total: number;
     approved: number;
-    /** From Redis presence. Null when Redis is unreachable. */
     online: number | null;
     pendingKyc: number;
     blocked: number;
@@ -61,7 +59,6 @@ export interface SocketActivity {
     dispatchAttempts: number;
     createdAt: string;
     ageSeconds: number;
-    /** How many drivers this order has actually reached. */
     offeredTo: number;
   }[];
 }

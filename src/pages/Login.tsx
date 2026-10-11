@@ -5,13 +5,6 @@ import { getToken, setToken } from '@/constants/api_management/MyHttpHelperWithT
 import { SignInManager } from '@/modules/auth/authController';
 import { parseApiError } from '@/utils/parseApiError';
 
-/**
- * Staff sign-in.
- *
- * Email and password, not Firebase. App accounts are created through Firebase
- * and carry no password, so they can never authenticate here — which is the
- * point: this endpoint only admits seeded staff.
- */
 export function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -26,10 +19,6 @@ export function Login() {
     try {
       const result = await signIn({ email: email.trim(), password });
 
-      // The API refuses a plain USER/RIDER token, but it would otherwise be
-      // stored here and produce a wall of 403s instead of a sentence
-      // explaining why. ADMIN and SUPPORT are the only two roles this
-      // dashboard is for — see roles.decorator.ts.
       const isStaff = result.user.roles?.some((role) => role === 'ADMIN' || role === 'SUPPORT');
       if (!isStaff) {
         setError('That account cannot sign in to the admin dashboard.');
@@ -43,7 +32,6 @@ export function Login() {
     }
   }
 
-  // Signing in again while already signed in just lands on the dashboard.
   if (getToken()) return <Navigate to="/" replace />;
 
   return (

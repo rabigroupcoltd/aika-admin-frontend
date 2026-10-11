@@ -7,8 +7,6 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-// ------------------------------------------------------------------- card
-
 export function Card({
   children,
   className,
@@ -53,8 +51,6 @@ export function CardHeader({
   );
 }
 
-// ----------------------------------------------------------------- button
-
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'outline';
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
@@ -92,8 +88,6 @@ export function Button({
   );
 }
 
-// ------------------------------------------------------------------ badge
-
 type Tone = 'green' | 'amber' | 'red' | 'blue' | 'neutral';
 
 const TONES: Record<Tone, string> = {
@@ -115,8 +109,6 @@ export function Badge({ children, tone = 'neutral' }: { children: ReactNode; ton
     </span>
   );
 }
-
-// ------------------------------------------------------------------ input
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return (
@@ -151,11 +143,7 @@ export function Select({
   );
 }
 
-// ------------------------------------------------------------------ table
-
 export function Table({ children }: { children: ReactNode }) {
-  // The wrapper scrolls, not the page: a wide table must never push the whole
-  // layout sideways.
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[640px] text-left text-sm">{children}</table>
@@ -188,8 +176,6 @@ export function Td({ children, className }: { children?: ReactNode; className?: 
     </td>
   );
 }
-
-// ------------------------------------------------------------------ states
 
 export function Spinner({ label }: { label?: string }) {
   return (

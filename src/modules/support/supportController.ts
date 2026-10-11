@@ -18,10 +18,6 @@ export const SUPPORT_PRIORITIES: SupportPriority[] = ['LOW', 'NORMAL', 'HIGH', '
 
 export const SUPPORT_QUERY_KEY = 'support';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
 export const useGetTicketsManager = ({
   status,
   priority,
@@ -81,18 +77,6 @@ export const useGetTicketByIdManager = ({
   });
 };
 
-// ============================================
-// MUTATION CONTROLLERS
-// ============================================
-
-/**
- * Post a message on a ticket.
- *
- * A staff reply moves an OPEN ticket to PENDING and a customer reply reopens a
- * RESOLVED one — both decided on the server, so the screen only has to refetch.
- * An internal note does neither: staff talking among themselves should not drag
- * a closed ticket back into the queue.
- */
 export const ReplyToTicketManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     SupportMessage,
@@ -113,7 +97,6 @@ export const ReplyToTicketManager = () => {
   return { replyToTicket, data, isLoading, isSuccess, isError, error };
 };
 
-/** Assign, reprioritise or close. Every change is written to the audit trail. */
 export const UpdateTicketManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     SupportTicketDetail,

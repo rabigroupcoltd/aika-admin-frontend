@@ -8,19 +8,11 @@ function initial(): Theme {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === 'light' || stored === 'dark') return stored;
   } catch {
-    /* private window, or site data blocked */
   }
 
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-/**
- * Light/dark, persisted per browser.
- *
- * Tailwind is configured with `darkMode: 'class'`, so the whole mechanism is
- * one class on <html> — which is also why this has to run before first paint to
- * avoid a flash, hence the effect firing on mount rather than on change only.
- */
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(initial);
 
@@ -29,7 +21,6 @@ export function useTheme() {
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch {
-      /* the choice simply will not survive a reload */
     }
   }, [theme]);
 

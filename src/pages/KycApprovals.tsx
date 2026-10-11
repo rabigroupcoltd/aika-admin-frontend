@@ -19,18 +19,10 @@ import {
 } from '@/modules/drivers/driversController';
 import { parseApiError } from '@/utils/parseApiError';
 
-/**
- * The KYC queue.
- *
- * A dedicated screen rather than a filter on the drivers table, because this is
- * a work queue: the operator is clearing a pile, and every row wants the same
- * two buttons in reach. The drivers table is for looking someone up.
- */
 export function KycApprovals() {
   const [rejecting, setRejecting] = useState<string | null>(null);
   const [reason, setReason] = useState('');
   const [actionError, setActionError] = useState<string | null>(null);
-  /** Which card is mid-flight, so only its own button shows a spinner. */
   const [busyId, setBusyId] = useState<string | null>(null);
 
   const { data, isLoading, isError, error, refetch } = useGetDriversManager({
@@ -178,11 +170,6 @@ export function KycApprovals() {
   );
 }
 
-/**
- * Riders who picked "drive" but never submitted their vehicle. There is no
- * driver profile to approve yet — the operator's move is to contact them so
- * they finish the documents step in the app, after which they land above.
- */
 function IncompleteApplications() {
   const { data, isLoading, isError, error, refetch } = useGetIncompleteApplicationsManager();
 

@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/**
- * shadcn-style tokens, mapped onto the Aiko palette.
- *
- * Both light and dark are defined here rather than only overriding dark, so no
- * colour has its single definition inside a conditional block.
- */
 @layer base {
   :root {
     --background: 0 0% 100%;

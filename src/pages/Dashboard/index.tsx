@@ -33,7 +33,6 @@ export function Dashboard() {
         subtitle="What is happening on the platform right now."
       />
 
-      {/* Anything that needs a human decision, before the numbers. */}
       {data && (data.drivers.pendingKyc > 0 || data.support.urgent > 0) ? (
         <div className="mb-6 flex flex-wrap gap-3">
           {data.drivers.pendingKyc > 0 ? (

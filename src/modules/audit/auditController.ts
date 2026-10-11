@@ -16,17 +16,6 @@ export const AUDIT_ENTITIES: AuditEntity[] = [
 
 export const AUDIT_QUERY_KEY = 'audit';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
-/**
- * The trail, newest first.
- *
- * Read-only by construction: there is no write, update or delete endpoint, so
- * this module has no mutation controllers at all. A log an admin can edit
- * answers no question worth asking.
- */
 export const useGetAuditLogsManager = ({
   entity,
   entityId,
@@ -64,7 +53,6 @@ export const useGetAuditLogsManager = ({
   });
 };
 
-/** Distinct action verbs in use, for the filter dropdown. */
 export const useGetAuditActionsManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({
     queryKey: [AUDIT_QUERY_KEY, 'actions'],
@@ -81,13 +69,6 @@ export const useGetAuditActionsManager = ({ enabled = true }: { enabled?: boolea
   });
 };
 
-/**
- * Everything that ever happened to one record.
- *
- * The question an admin actually asks — "why does this driver look like this" —
- * is about a row, not a time range. Rendered on the driver and order detail
- * screens rather than here.
- */
 export const useGetEntityHistoryManager = ({
   entity,
   entityId,

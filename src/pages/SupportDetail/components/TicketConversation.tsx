@@ -6,12 +6,7 @@ import type { SupportMessage } from '@/modules/support/type';
 
 interface TicketConversationProps {
   messages: SupportMessage[];
-  /** Reply mutation in flight. */
   sending: boolean;
-  /**
-   * Resolves only on success so a failed reply keeps its text — retyping a
-   * paragraph because of one network blip is not acceptable.
-   */
   onSend: (body: string, internal: boolean) => Promise<void>;
 }
 
@@ -25,7 +20,6 @@ export function TicketConversation({ messages, sending, onSend }: TicketConversa
       setBody('');
       setInternal(false);
     } catch {
-      /* surfaced upstream */
     }
   }
 

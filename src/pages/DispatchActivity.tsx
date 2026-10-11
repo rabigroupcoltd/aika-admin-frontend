@@ -14,17 +14,7 @@ import {
 import { duration, money } from '@/lib/format';
 import { useGetSocketActivityManager } from '@/modules/admin/adminController';
 
-/**
- * What dispatch is doing right now.
- *
- * The one number worth staring at is `offeredTo`: an order sitting unclaimed is
- * either reaching nobody — no drivers online in range, so widen or recruit — or
- * reaching everybody and being refused, which is a pricing or a parcel problem.
- * The two look identical on the orders table and need opposite responses.
- */
 export function DispatchActivity() {
-  // A live view — an operator leaves it open while working, so the controller's
-  // ten-second default is exactly right here.
   const { data, isLoading, isError, error, refetch } = useGetSocketActivityManager();
 
   if (isLoading) return <Spinner label="Reading dispatch state…" />;
@@ -98,8 +88,6 @@ export function DispatchActivity() {
                   <Td>
                     <span
                       className={
-                        // Two minutes is roughly when a customer starts
-                        // wondering whether the app is broken.
                         order.ageSeconds > 120 ? 'font-medium text-amber-600' : undefined
                       }>
                       {duration(order.ageSeconds)}

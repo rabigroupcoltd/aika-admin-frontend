@@ -6,10 +6,6 @@ import type { PricingRule, UpdatePricingVariables } from './type';
 
 export const PRICING_QUERY_KEY = 'pricing';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
 export const useGetPricingRulesManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({
     queryKey: [PRICING_QUERY_KEY, 'list'],
@@ -26,18 +22,6 @@ export const useGetPricingRulesManager = ({ enabled = true }: { enabled?: boolea
   });
 };
 
-// ============================================
-// MUTATION CONTROLLERS
-// ============================================
-
-/**
- * Change one vehicle's rate card.
- *
- * The screen sends only the fields an admin actually edited. Posting the whole
- * rule back would overwrite anything a second admin changed between this page
- * loading and Save — which is exactly the kind of edit nobody notices until a
- * fare comes out wrong.
- */
 export const UpdatePricingRuleManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     PricingRule,

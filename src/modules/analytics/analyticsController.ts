@@ -6,10 +6,6 @@ import type { AnalyticsOverview, TopDriver } from './type';
 
 export const ANALYTICS_QUERY_KEY = 'analytics';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
 export const useGetAnalyticsOverviewManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({
     queryKey: [ANALYTICS_QUERY_KEY, 'overview'],

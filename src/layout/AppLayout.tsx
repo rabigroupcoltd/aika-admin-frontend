@@ -8,28 +8,13 @@ import { useGetAdminSummaryManager } from '@/modules/admin/adminController';
 import { useGetCurrentAdminManager } from '@/modules/auth/authController';
 import { AppSidebar } from './AppSidebar';
 
-/**
- * The shell every signed-in screen renders inside.
- *
- * It owns one query of its own — the dashboard summary — because the sidebar
- * badges need the pending-KYC and open-ticket counts on every screen, not only
- * on the dashboard. React Query dedupes it with the dashboard's own call, so
- * this costs nothing extra when the operator is looking at the dashboard and
- * keeps the badges live when they are not.
- */
 export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
 
-  // The badges are a nudge, not a live feed — a minute stale is fine, and it
-  // keeps a background tab from polling the API all day. React Query dedupes
-  // this with the dashboard's own call, so it costs nothing extra there.
   const { data: summary } = useGetAdminSummaryManager({ refetchInterval: 60_000 });
 
-  // SUPPORT sees a narrower sidebar — no pricing, wallets, settings, audit or
-  // KYC approval. Defaults to the narrower view while this is still loading,
-  // so a support account never sees an admin-only link flash on screen.
   const { data: currentAdmin } = useGetCurrentAdminManager();
   const isAdmin = Boolean(currentAdmin?.roles.includes('ADMIN'));
 
@@ -40,7 +25,6 @@ export function AppLayout() {
 
   return (
     <div className="flex h-full bg-aiko-dark-50 dark:bg-aiko-dark-950">
-      {/* Only rendered on mobile, where the sidebar overlays the content. */}
       {sidebarOpen ? (
         <button
           aria-label="Close menu"
@@ -72,11 +56,6 @@ export function AppLayout() {
           </button>
 
           <div className="flex flex-1 items-center gap-4">
-            {/*
-              Live counts in the header rather than only on the dashboard: an
-              operator working the orders table still needs to notice that three
-              orders are sitting unclaimed.
-            */}
             {summary ? (
               <div className="hidden items-center gap-4 text-sm md:flex">
                 <HeaderStat label="Searching" value={summary.liveOrders.searching} warn />
@@ -127,8 +106,6 @@ function HeaderStat({
       <span
         className={cn(
           'h-2 w-2 rounded-full',
-          // Amber only when there is actually something waiting — a permanently
-          // coloured dot stops being a signal.
           warn && Number(value) > 0 ? 'bg-amber-500' : 'bg-aiko-green-500',
         )}
       />

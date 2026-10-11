@@ -6,10 +6,6 @@ import type { PlatformSetting, UpdatePlatformSettingVariables } from './type';
 
 export const SETTINGS_QUERY_KEY = 'settings';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
 export const useGetPlatformSettingsManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({
     queryKey: [SETTINGS_QUERY_KEY, 'list'],
@@ -26,11 +22,6 @@ export const useGetPlatformSettingsManager = ({ enabled = true }: { enabled?: bo
   });
 };
 
-// ============================================
-// MUTATION CONTROLLERS
-// ============================================
-
-/** Changes one global setting. Takes effect on the server's very next request. */
 export const UpdatePlatformSettingManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     PlatformSetting,

@@ -11,11 +11,6 @@ import type {
 
 export const WALLET_QUERY_KEY = 'wallet';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
-/** Admin only. Every driver's wallet, sorted by available balance — the payouts view. */
 export const useGetAllWalletsManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({
     queryKey: [WALLET_QUERY_KEY, 'all'],
@@ -33,11 +28,6 @@ export const useGetAllWalletsManager = ({ enabled = true }: { enabled?: boolean 
   });
 };
 
-/**
- * The ledger for one driver — every earning, fee, withdrawal, debt payment and
- * manual adjustment, newest first. `limit`/`offset`, not `page`: this mirrors
- * `ListTransactionsQueryDto` on the server exactly rather than translating.
- */
 export const useGetWalletTransactionsManager = ({
   driverId,
   limit = 20,

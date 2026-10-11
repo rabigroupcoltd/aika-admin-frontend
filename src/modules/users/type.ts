@@ -1,6 +1,5 @@
 export type AppUserRole = 'USER' | 'RIDER' | 'ADMIN' | 'SUPPORT';
 
-/** `PUBLIC_USER_SELECT` on the server — the password hash is never included. */
 export interface AppUser {
   id: string;
   email: string | null;
@@ -23,7 +22,6 @@ export interface BlockUserVariables {
   reason?: string;
 }
 
-/** The two roles an admin can hand out — never USER or RIDER, which come from the app's own sign-up flow. */
 export type StaffRole = 'ADMIN' | 'SUPPORT';
 
 export interface CreateStaffVariables {
@@ -33,11 +31,8 @@ export interface CreateStaffVariables {
   role: StaffRole;
 }
 
-// ------------------------------------------------------- user management
-
 export type DirectoryType = 'PASSENGER' | 'DRIVER' | 'STAFF';
 
-/** Where a would-be driver is with approval. NOT_SUBMITTED = chose to drive, never sent documents. */
 export type DriverApproval = 'NOT_SUBMITTED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export interface DirectoryDriver {

@@ -32,11 +32,6 @@ const APPROVAL: Record<DriverApproval, { label: string; tone: 'green' | 'amber' 
 
 type TabKey = 'verification' | 'trips' | 'vehicle' | 'wallet' | 'activity';
 
-/**
- * One user, everything about them: who they are, their documents, trips on
- * either side, money, and what staff have done — with approve, reject and
- * block in the header so review happens in one place.
- */
 export function UserDetail() {
   const { id = '' } = useParams();
   const [params, setParams] = useSearchParams();
@@ -67,7 +62,6 @@ export function UserDetail() {
   const { payDebt, isLoading: paying } = PayDriverDebtManager();
   const { updateDebtLimit, isLoading: settingLimit } = UpdateDebtLimitManager();
 
-  /** Every action refreshes the page's own data and history, then rethrows on failure. */
   async function run(action: () => Promise<unknown>) {
     setActionError(null);
     try {

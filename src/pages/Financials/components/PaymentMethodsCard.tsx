@@ -43,8 +43,6 @@ function PaymentSplit({
   total: number;
   tone: string;
 }) {
-  // Guard the divide: a platform with no revenue yet is the normal state on
-  // day one, and NaN% is a worse answer than 0%.
   const percent = total > 0 ? Math.round((amount / total) * 100) : 0;
 
   return (

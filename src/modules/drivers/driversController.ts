@@ -14,17 +14,6 @@ import type {
 
 export const DRIVERS_QUERY_KEY = 'drivers';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
-/**
- * The fleet.
- *
- * Not paginated server-side — the endpoint returns the whole filtered set in
- * one array, which is why the screens search it client-side. Fine at pilot
- * scale; worth a server-side `q` once the fleet outgrows one response.
- */
 export const useGetDriversManager = ({
   vehicleType,
   kycStatus,
@@ -74,10 +63,6 @@ export const useGetDriverByIdManager = ({
   });
 };
 
-/**
- * Riders who chose to drive but never submitted their vehicle — they have no
- * driver profile yet, so nothing to approve, and would otherwise be invisible.
- */
 export const useGetIncompleteApplicationsManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({
     queryKey: [DRIVERS_QUERY_KEY, 'incomplete-applications'],
@@ -96,17 +81,6 @@ export const useGetIncompleteApplicationsManager = ({ enabled = true }: { enable
   });
 };
 
-// ============================================
-// MUTATION CONTROLLERS
-// ============================================
-
-/**
- * Approve KYC — the one action that lets a driver go online.
- *
- * Invalidates the admin summary as well as the driver list, because the
- * pending-KYC badge in the sidebar is counted from it and would otherwise keep
- * advertising work that is already done.
- */
 export const ApproveKycManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     Driver,
@@ -128,7 +102,6 @@ export const ApproveKycManager = () => {
   return { approveKyc, data, isLoading, isSuccess, isError, error };
 };
 
-/** Reject KYC. The reason is shown to the driver and recorded in the trail. */
 export const RejectKycManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     Driver,
@@ -150,7 +123,6 @@ export const RejectKycManager = () => {
   return { rejectKyc, data, isLoading, isSuccess, isError, error };
 };
 
-/** Block or unblock. Blocking removes the driver from the dispatch pool at once. */
 export const BlockDriverManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     Driver,
@@ -172,7 +144,6 @@ export const BlockDriverManager = () => {
   return { blockDriver, data, isLoading, isSuccess, isError, error };
 };
 
-/** Record a cash repayment. Clears the block once back under the limit. */
 export const PayDriverDebtManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     unknown,

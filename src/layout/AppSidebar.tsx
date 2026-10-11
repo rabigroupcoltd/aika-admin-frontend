@@ -19,9 +19,7 @@ interface NavItem {
   to: string;
   label: string;
   icon: ComponentType<{ className?: string }>;
-  /** Rendered as a count pill — open tickets, drivers awaiting KYC. */
   badge?: number;
-  /** Hidden from SUPPORT — pricing, wallets, settings, audit, KYC approval. */
   adminOnly?: boolean;
 }
 
@@ -30,13 +28,6 @@ interface NavSection {
   items: NavItem[];
 }
 
-/**
- * The nav, grouped by what an operator is doing rather than by data model.
- *
- * "Operations" is the daily loop, "Money" is what gets reconciled weekly, and
- * "Platform" is the stuff you touch when something is wrong. A flat list of
- * twelve links makes the daily four harder to find than they should be.
- */
 function sections(counts: { pendingKyc?: number; openTickets?: number }): NavSection[] {
   return [
     {
@@ -74,7 +65,6 @@ export function AppSidebar({
   counts,
 }: {
   open: boolean;
-  /** SUPPORT gets the same sections with the admin-only items filtered out, not a different layout. */
   isAdmin: boolean;
   counts: { pendingKyc?: number; openTickets?: number };
 }) {
@@ -116,8 +106,6 @@ export function AppSidebar({
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  // `end` only on the dashboard: without it the root route
-                  // matches every path and every link renders as active.
                   end={item.to === '/'}
                   className={({ isActive }) =>
                     cn(

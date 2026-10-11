@@ -20,15 +20,6 @@ import { useGetAllWalletsManager } from '@/modules/wallet/walletController';
 
 type View = 'debt' | 'payouts';
 
-/**
- * Wallets and payouts.
- *
- * Two views over the same fleet, from two different endpoints — debt
- * (`/drivers`, exposure against the limit) and available balance
- * (`/wallet/all`, what a driver could actually withdraw). They answer
- * different questions and rarely overlap: a driver can carry debt and still
- * have a positive balance if cash trips outpaced online ones.
- */
 export function Wallets() {
   const [view, setView] = useState<View>('debt');
 
@@ -58,14 +49,10 @@ export function Wallets() {
   );
 }
 
-/** Who owes what, sorted by exposure against their limit — the original view. */
 function DebtExposureView() {
   const [search, setSearch] = useState('');
   const [onlyOwing, setOnlyOwing] = useState(true);
 
-  // The same query the drivers table runs, deduped by React Query — each
-  // driver row already carries its debt fields, so there is no separate
-  // request to make.
   const { data, isLoading, isError, error, refetch } = useGetDriversManager();
 
   const rows = useMemo(() => {
@@ -82,8 +69,6 @@ function DebtExposureView() {
       );
     }
 
-    // Most exposed first — debt as a share of the limit, not the raw figure, so
-    // a driver on a small limit is not buried under one on a large one.
     return [...list].sort(
       (a, b) => b.currentDebt / (debtLimitOf(b) || 1) - a.currentDebt / (debtLimitOf(a) || 1),
     );
@@ -214,12 +199,6 @@ function DebtExposureView() {
   );
 }
 
-/**
- * What every driver could withdraw right now, from `GET /wallet/all` — the
- * endpoint the old version of this screen's own comment claimed did not
- * exist. Sorted server-side by `availableBalance`, so the biggest payout risk
- * is already first.
- */
 function PayoutsView() {
   const [search, setSearch] = useState('');
   const { data, isLoading, isError, error, refetch } = useGetAllWalletsManager();

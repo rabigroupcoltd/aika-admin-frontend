@@ -3,11 +3,6 @@ import { Button, Card, CardHeader, Input } from '@/components/ui';
 
 interface KycRejectionCardProps {
   loading: boolean;
-  /**
-   * Resolves only on success so the reason field keeps its value when the
-   * page-level banner takes the error — operators usually want to fix a word,
-   * not retype the whole sentence.
-   */
   onReject: (reason: string) => Promise<unknown>;
 }
 
@@ -19,7 +14,6 @@ export function KycRejectionCard({ loading, onReject }: KycRejectionCardProps) {
       await onReject(reason.trim());
       setReason('');
     } catch {
-      /* surfaced upstream */
     }
   }
 

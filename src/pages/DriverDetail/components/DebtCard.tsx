@@ -5,18 +5,10 @@ import type { Driver } from '@/modules/drivers/type';
 
 interface DebtCardProps {
   driver: Driver;
-  /** Support can see the balance but not touch it — both server-side actions here are admin-only. */
   readOnly?: boolean;
-  /** Record-a-payment mutation in flight. */
   paying: boolean;
-  /** Set-limit mutation in flight. */
   settingLimit: boolean;
-  /**
-   * Both callbacks resolve only on success — they rethrow otherwise so the
-   * inputs keep their value when the page-level banner takes the error.
-   */
   onPay: (amount: number) => Promise<unknown>;
-  /** null resets the driver to the platform-wide limit. */
   onSetLimit: (debtLimit: number | null) => Promise<unknown>;
 }
 
@@ -33,7 +25,6 @@ export function DebtCard({ driver, readOnly, paying, settingLimit, onPay, onSetL
       await onPay(amount);
       setPayment('');
     } catch {
-      /* surfaced upstream */
     }
   }
 
@@ -42,7 +33,6 @@ export function DebtCard({ driver, readOnly, paying, settingLimit, onPay, onSetL
       await onSetLimit(value);
       setNewLimit('');
     } catch {
-      /* surfaced upstream */
     }
   }
 

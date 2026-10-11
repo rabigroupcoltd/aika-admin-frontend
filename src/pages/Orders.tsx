@@ -17,14 +17,6 @@ import { dateTime, humanise, money, orderTone } from '@/lib/format';
 import { useGetOrdersManager } from '@/modules/orders/ordersController';
 import type { OrderStatus } from '@/modules/orders/type';
 
-/**
- * Statuses worth filtering by, in the order an operator thinks about them.
- *
- * Both lanes share the enum, but the marketplace lane is the one the pilot
- * runs, so its states lead. The legacy bid-lane states are still listed —
- * historical orders carry them and hiding them would make those rows
- * unreachable.
- */
 const STATUS_FILTERS: { value: OrderStatus | ''; label: string }[] = [
   { value: '', label: 'All statuses' },
   { value: 'SEARCHING_FOR_DRIVER', label: 'Searching for driver' },
@@ -57,8 +49,6 @@ export function Orders() {
             value={status}
             onChange={(event) => {
               setStatus(event.target.value as OrderStatus | '');
-              // A filter change invalidates the page number — page 4 of the old
-              // filter is rarely page 4 of the new one.
               setPage(1);
             }}>
             {STATUS_FILTERS.map((option) => (

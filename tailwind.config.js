@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{ts,tsx}'],
@@ -6,10 +5,6 @@ export default {
     container: { center: true, padding: '2rem', screens: { '2xl': '1400px' } },
     extend: {
       colors: {
-        /**
-         * Aiko brand, carried over verbatim from admin-dashboard so the two
-         * surfaces are recognisably the same product. 500 is the primary green.
-         */
         aiko: {
           green: {
             50: '#F0F9F5',

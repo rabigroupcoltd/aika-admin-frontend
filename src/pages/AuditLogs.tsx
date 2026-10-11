@@ -21,12 +21,6 @@ import {
 } from '@/modules/audit/auditController';
 import type { AuditEntity } from '@/modules/audit/type';
 
-/**
- * The admin audit trail.
- *
- * Read-only by construction — there is no write endpoint and no edit control,
- * because a log an admin can change answers no question worth asking.
- */
 export function AuditLogs() {
   const [entity, setEntity] = useState<AuditEntity | ''>('');
   const [action, setAction] = useState('');

@@ -2,12 +2,6 @@ import type { KycStatus } from '@/modules/drivers/type';
 import type { OrderStatus } from '@/modules/orders/type';
 import type { SupportPriority, SupportStatus } from '@/modules/support/type';
 
-/**
- * Money, as Nigerians write it.
- *
- * The API returns whole naira, not kobo, so nothing is divided here — doing so
- * once by mistake is a bug that looks plausible on every screen.
- */
 export function money(amount: number | null | undefined, currency = 'NGN'): string {
   if (amount == null) return '—';
   const symbol = currency === 'NGN' ? '₦' : `${currency} `;
@@ -33,7 +27,6 @@ export function dateTime(value: string | Date | null | undefined): string {
   });
 }
 
-/** "4m ago" — for feeds, where the exact timestamp is noise. */
 export function relative(value: string | Date | null | undefined): string {
   if (!value) return '—';
 
@@ -44,7 +37,6 @@ export function relative(value: string | Date | null | undefined): string {
   return `${Math.floor(seconds / 86400)}d ago`;
 }
 
-/** Seconds as `3m 20s`, for how long an order has been waiting. */
 export function duration(seconds: number): string {
   if (seconds < 60) return `${seconds}s`;
   const minutes = Math.floor(seconds / 60);
@@ -54,13 +46,6 @@ export function duration(seconds: number): string {
 
 type Tone = 'green' | 'amber' | 'red' | 'blue' | 'neutral';
 
-/**
- * Status colour, in one place.
- *
- * Both order lanes share the enum, so this maps thirteen values rather than the
- * six either lane uses — a screen showing both must not colour half of them grey
- * by omission.
- */
 export function orderTone(status: OrderStatus): Tone {
   switch (status) {
     case 'DELIVERED':
@@ -73,13 +58,10 @@ export function orderTone(status: OrderStatus): Tone {
     case 'PENDING':
       return 'amber';
     default:
-      // Everything in flight — RESERVED through IN_TRANSIT, and the legacy
-      // ACCEPTED/ARRIVED/IN_PROGRESS lane.
       return 'blue';
   }
 }
 
-/** Title-cases an enum for display: SEARCHING_FOR_DRIVER -> Searching for driver. */
 export function humanise(value: string): string {
   const spaced = value.replace(/_/g, ' ').toLowerCase();
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);

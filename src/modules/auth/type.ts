@@ -17,7 +17,6 @@ export interface SignInResult {
   user: AdminUser;
 }
 
-/** `GET /auth/profile` — enough of it for role gating; the rest of the payload goes unused here. */
 export interface CurrentAdmin {
   id: string;
   name: string | null;

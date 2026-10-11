@@ -47,14 +47,6 @@ const APPROVAL_TONE: Record<DriverApproval, 'green' | 'amber' | 'red' | 'neutral
   REJECTED: 'red',
 };
 
-/**
- * User management: passengers, drivers and staff on one screen, one tab each.
- *
- * Every row opens the user's full profile, where an admin reviews documents,
- * approves, sees trips and money. The Drivers tab is built from users rather
- * than driver rows, so someone who chose to drive but never submitted
- * documents is listed — marked "Not submitted" — instead of being invisible.
- */
 export function UserManagement() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
@@ -124,7 +116,6 @@ export function UserManagement() {
         }
       />
 
-      {/* Tabs */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="inline-flex gap-0.5 rounded-lg bg-aiko-dark-100 p-1 dark:bg-aiko-dark-800">
           {TABS.map((t) => (
@@ -170,7 +161,6 @@ export function UserManagement() {
         </div>
       </div>
 
-      {/* Work waiting on the Drivers tab, one click to filter to it. */}
       {tab.key === 'DRIVER' && counts && (counts.pendingDrivers > 0 || counts.notSubmitted > 0) ? (
         <div className="mb-4 flex flex-wrap gap-2 text-sm">
           {counts.pendingDrivers > 0 ? (
@@ -381,7 +371,6 @@ function UserRow({
   );
 }
 
-/** The ⋮ menu. Clicks inside never bubble to the row's open-profile handler. */
 function RowMenu({
   isAdmin,
   isBlocked,

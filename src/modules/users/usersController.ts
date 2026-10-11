@@ -13,17 +13,6 @@ import type {
 
 export const USERS_QUERY_KEY = 'users';
 
-// ============================================
-// QUERY CONTROLLERS
-// ============================================
-
-/**
- * Everyone with an account.
- *
- * Unpaginated, like `/drivers` — a plain array comes back, which is why the
- * screen filters it in the browser rather than passing a search term.
- * Admin/support only on the server now — see users.controller.ts.
- */
 export const useGetUsersManager = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({
     queryKey: [USERS_QUERY_KEY, 'list'],
@@ -40,7 +29,6 @@ export const useGetUsersManager = ({ enabled = true }: { enabled?: boolean } = {
   });
 };
 
-/** One user-management tab: passengers, drivers (submitted or not) or staff. */
 export const useGetUserDirectoryManager = ({
   type,
   search,
@@ -69,7 +57,6 @@ export const useGetUserDirectoryManager = ({
   });
 };
 
-/** Everything on the user detail page: account, driver profile, documents, totals. */
 export const useGetUserOverviewManager = ({
   userId,
   enabled = true,
@@ -94,16 +81,6 @@ export const useGetUserOverviewManager = ({
   });
 };
 
-// ============================================
-// MUTATION CONTROLLERS
-// ============================================
-
-/**
- * Blocks or unblocks any account. Admin only — see users.controller.ts.
- *
- * Takes effect on the account's very next request, not its next sign-in:
- * `JwtStrategy` re-checks `isBlocked` on every call.
- */
 export const BlockUserManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     AppUser,
@@ -125,10 +102,6 @@ export const BlockUserManager = () => {
   return { blockUser, data, isLoading, isSuccess, isError, error };
 };
 
-/**
- * Creates a new admin or support account — the dashboard's own equivalent of
- * `prisma/seed.ts`'s admin bootstrap, for every account after the first one.
- */
 export const CreateStaffManager = () => {
   const { callApi, data, isLoading, isSuccess, isError, error } = useApiManager<
     AppUser,

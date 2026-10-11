@@ -5,7 +5,6 @@ interface MoneyStatProps {
   label: string;
   value: number;
   hint: string;
-  /** Turns the figure red — used when the number is a problem, not a win. */
   warn?: boolean;
 }
 

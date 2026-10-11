@@ -18,7 +18,6 @@ import {
 import type { PricingRule } from '@/modules/pricing/type';
 import { parseApiError } from '@/utils/parseApiError';
 
-/** The editable numbers, with what each one actually does to a fare. */
 const FIELDS: { key: keyof PricingRule; label: string; hint: string; step?: string }[] = [
   { key: 'baseFare', label: 'Base fare', hint: 'Charged before any distance' },
   { key: 'perKm', label: 'Per km', hint: 'Straight-line distance × road factor' },
@@ -43,13 +42,6 @@ const FIELDS: { key: keyof PricingRule; label: string; hint: string; step?: stri
   },
 ];
 
-/**
- * The rate card.
- *
- * One editable card per vehicle type, because a rule only ever changes for one
- * vehicle at a time and a single wide table of eight numbers across five rows
- * invites editing the wrong line.
- */
 export function Pricing() {
   const { data, isLoading, isError, error, refetch } = useGetPricingRulesManager();
 
@@ -94,8 +86,6 @@ function RuleCard({ rule }: { rule: PricingRule }) {
   async function save() {
     setSaveError(null);
 
-    // Only what was actually touched. Sending every field back would overwrite
-    // a value another admin changed between this page loading and Save.
     const edited = Object.fromEntries(
       Object.entries(draft)
         .filter(([, value]) => value !== '')
@@ -112,7 +102,6 @@ function RuleCard({ rule }: { rule: PricingRule }) {
 
   const dirty = Object.values(draft).some((value) => value !== '');
 
-  /** A worked example, so the numbers above mean something before saving. */
   const sample = (() => {
     const value = (key: keyof PricingRule) => {
       const edited = draft[key as string];
@@ -153,9 +142,6 @@ function RuleCard({ rule }: { rule: PricingRule }) {
             <Input
               type="number"
               step={field.step ?? '1'}
-              // Uncontrolled until touched: the placeholder shows the live value
-              // so an untouched field is visibly "unchanged" rather than looking
-              // like a value that will be resubmitted.
               value={draft[field.key as string] ?? ''}
               placeholder={String(rule[field.key])}
               onChange={(event) =>

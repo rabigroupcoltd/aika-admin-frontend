@@ -8,7 +8,6 @@ interface LiveOrdersCardProps {
 
 export function LiveOrdersCard({ liveOrders }: LiveOrdersCardProps) {
   return (
-    /* Live order pipeline — the three states an operator can act on. */
     <Card className="mb-6">
       <CardHeader
         title="Live orders"

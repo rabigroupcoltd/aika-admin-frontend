@@ -23,11 +23,7 @@ import { getToken } from '@/constants/api_management/MyHttpHelperWithToken';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Admin data is read far more often than it changes, and an operator
-      // switching between screens should not re-fetch everything each time.
       staleTime: 30_000,
-      // A 401 is terminal — the interceptor has already cleared the session and
-      // redirected, so retrying only delays the sign-in screen.
       retry: (failureCount, error) => {
         const status = (error as { response?: { status?: number } })?.response?.status;
         if (status === 401 || status === 403) return false;
@@ -38,15 +34,6 @@ const queryClient = new QueryClient({
   },
 });
 
-/**
- * Gate for everything behind sign-in.
- *
- * Checks for a token rather than for a validated session: the API is the real
- * authority, and a token that has expired produces a 401 on the first query,
- * which the axios interceptor turns into a redirect. Verifying here as well
- * would mean an extra round trip before every screen to answer a question the
- * next request answers anyway.
- */
 function RequireAuth() {
   return getToken() ? <Outlet /> : <Navigate to="/login" replace />;
 }
@@ -64,7 +51,6 @@ export function App() {
 
               <Route path="orders" element={<Orders />} />
               <Route path="orders/:id" element={<OrderDetail />} />
-              {/* Drivers live under user management now; old links still land. */}
               <Route path="drivers" element={<Navigate to="/users?tab=drivers" replace />} />
               <Route path="drivers/:id" element={<DriverRedirect />} />
               <Route path="kyc" element={<KycApprovals />} />
@@ -86,7 +72,6 @@ export function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-      {/* One host for every toast useApiManager raises. */}
       <CustomToastContainer />
     </QueryClientProvider>
   );

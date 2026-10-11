@@ -5,7 +5,6 @@ export type SupportPriority = 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
 
 export interface SupportTicket {
   id: string;
-  /** Short and quotable over the phone — a uuid is unreadable aloud. */
   reference: string;
   requesterId: string;
   orderId: string | null;
@@ -25,9 +24,7 @@ export interface SupportMessage {
   id: string;
   ticketId: string;
   senderId: string;
-  /** Stored rather than derived from the sender's current role. */
   fromStaff: boolean;
-  /** Staff-only note. The server strips these for the requester. */
   internal: boolean;
   body: string;
   createdAt: string;
@@ -42,7 +39,6 @@ export interface SupportTicketDetail extends SupportTicket {
   > | null;
 }
 
-/** The queue page, with per-status counts for the tabs above the table. */
 export interface SupportQueue {
   data: SupportTicket[];
   meta: { page: number; limit: number; total: number; pages: number };
@@ -69,6 +65,5 @@ export interface UpdateTicketVariables {
   id: string;
   status?: SupportStatus;
   priority?: SupportPriority;
-  /** `null` unassigns — distinct from omitting the key, which leaves it alone. */
   assigneeId?: string | null;
 }

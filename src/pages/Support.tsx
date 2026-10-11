@@ -26,8 +26,6 @@ const TABS: { value: SupportStatus | ''; label: string }[] = [
 ];
 
 export function Support() {
-  // Opens on OPEN rather than All: this is a work queue, and the queue is what
-  // has not been dealt with.
   const [status, setStatus] = useState<SupportStatus | ''>('OPEN');
   const [search, setSearch] = useState('');
 

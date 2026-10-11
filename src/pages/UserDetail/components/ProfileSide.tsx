@@ -2,7 +2,6 @@ import { Badge, Card, CardHeader } from '@/components/ui';
 import { humanise, shortDate } from '@/lib/format';
 import type { UserOverview } from '@/modules/users/type';
 
-/** Who they are and how far through sign-up they got. */
 export function ProfileSide({ user }: { user: UserOverview }) {
   const rows: { label: string; value: string }[] = [
     { label: 'Phone', value: user.phone ?? '—' },

@@ -26,14 +26,6 @@ interface WalletLedgerCardProps {
   driverId: string;
 }
 
-/**
- * Every balance movement for this driver — ride earnings, platform fees,
- * withdrawals, debt payments, manual adjustments — newest first.
- *
- * `offset`-paged, not `page`-paged: `GET /wallet/driver/:id/transactions`
- * takes limit/offset directly, so the state here mirrors that instead of
- * translating through a page number.
- */
 export function WalletLedgerCard({ driverId }: WalletLedgerCardProps) {
   const [offset, setOffset] = useState(0);
 

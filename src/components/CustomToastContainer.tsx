@@ -2,17 +2,6 @@ import { CheckCircle2, Info, X, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/components/ui';
 
-/**
- * Toasts, without a dependency.
- *
- * `useApiManager` fires these from outside React — it is a hook, but its
- * success and error callbacks run in contexts that have no access to a
- * provider's setState. So the store is a plain module-level array with a
- * subscriber list, and `<CustomToastContainer />` is the one component that
- * reads it. That is also what lets `showToast.error(...)` be called from an
- * axios interceptor or an event handler with no ceremony.
- */
-
 type Tone = 'success' | 'error' | 'info';
 
 interface Toast {
@@ -41,8 +30,6 @@ function push(tone: Tone, message: string) {
   toasts = [...toasts, { id, tone, message }];
   emit();
 
-  // Errors linger: a driver-blocking failure is worth reading twice, and a
-  // success is self-evident from the screen updating behind it.
   window.setTimeout(() => dismiss(id), tone === 'error' ? 6000 : 3500);
 }
 

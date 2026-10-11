@@ -22,11 +22,6 @@ interface VerificationTabProps {
   onReject: (reason: string) => Promise<unknown>;
 }
 
-/**
- * Everything needed to decide on a driver, side by side: the selfie they
- * signed up with, their documents at a readable size, and the vehicle details
- * they typed — with approve and reject right below.
- */
 export function VerificationTab({
   user,
   isAdmin,
