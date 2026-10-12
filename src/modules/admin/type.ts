@@ -63,7 +63,7 @@ export interface SocketActivity {
   }[];
 }
 
-export type LiveDriverStatus = 'AVAILABLE' | 'BUSY' | 'RESTRICTED' | 'DISCONNECTED';
+export type LiveDriverStatus = 'AVAILABLE' | 'BUSY' | 'RESTRICTED' | 'DISCONNECTED' | 'OFFLINE';
 
 export interface LiveDriver {
   driverId: string;
@@ -92,6 +92,7 @@ export interface LiveDrivers {
   generatedAt: string;
   counts: {
     online: number;
+    offline: number;
     available: number;
     busy: number;
     restricted: number;

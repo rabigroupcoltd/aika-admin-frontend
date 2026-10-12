@@ -32,14 +32,17 @@ export const useGetAdminSummaryManager = ({
 };
 
 export const useGetLiveDriversManager = ({
+  includeOffline = false,
   enabled = true,
   refetchInterval = 30_000,
-}: { enabled?: boolean; refetchInterval?: number } = {}) => {
+}: { includeOffline?: boolean; enabled?: boolean; refetchInterval?: number } = {}) => {
   return useQuery({
-    queryKey: ['admin', 'live-drivers'],
+    queryKey: ['admin', 'live-drivers', includeOffline],
     queryFn: async () => {
       try {
-        const response = await AxiosWithToken.get<ApiResponse<LiveDrivers>>('/admin/live-drivers');
+        const response = await AxiosWithToken.get<ApiResponse<LiveDrivers>>('/admin/live-drivers', {
+          params: includeOffline ? { includeOffline: true } : undefined,
+        });
         return response.data.data;
       } catch (error) {
         throw new Error(parseApiError(error));

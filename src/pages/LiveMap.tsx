@@ -18,6 +18,15 @@ const STATUS: Record<LiveDriverStatus, { label: string; color: string; chip: str
   BUSY: { label: 'On a trip', color: '#d97706', chip: 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' },
   RESTRICTED: { label: 'Restricted', color: '#dc2626', chip: 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300' },
   DISCONNECTED: { label: 'Disconnected', color: '#6b7280', chip: 'bg-aiko-dark-100 text-aiko-dark-600 dark:bg-aiko-dark-800 dark:text-aiko-dark-300' },
+  OFFLINE: { label: 'Offline', color: '#9ca3af', chip: 'bg-aiko-dark-50 text-aiko-dark-500 dark:bg-aiko-dark-800/60 dark:text-aiko-dark-400' },
+};
+
+const COUNT_KEY: Record<LiveDriverStatus, 'available' | 'busy' | 'restricted' | 'disconnected' | 'offline'> = {
+  AVAILABLE: 'available',
+  BUSY: 'busy',
+  RESTRICTED: 'restricted',
+  DISCONNECTED: 'disconnected',
+  OFFLINE: 'offline',
 };
 
 function since(iso: string | null, now: number): string {
@@ -78,7 +87,10 @@ function useIsDark(): boolean {
 }
 
 export function LiveMap() {
-  const { data, isLoading, isError, error, refetch, isFetching, dataUpdatedAt } = useGetLiveDriversManager();
+  const [showOffline, setShowOffline] = useState(false);
+  const { data, isLoading, isError, error, refetch, isFetching, dataUpdatedAt } = useGetLiveDriversManager({
+    includeOffline: showOffline,
+  });
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<LiveDriverStatus | ''>('');
   const [now, setNow] = useState(Date.now());
@@ -209,7 +221,8 @@ export function LiveMap() {
             {counts.online} on shift
           </span>
           {(Object.keys(STATUS) as LiveDriverStatus[]).map((key) => {
-            const value = counts[{ AVAILABLE: 'available', BUSY: 'busy', RESTRICTED: 'restricted', DISCONNECTED: 'disconnected' }[key] as keyof typeof counts] as number;
+            const value = counts[COUNT_KEY[key]];
+            if (key === 'OFFLINE' && !showOffline) return null;
             return (
               <button
                 key={key}
@@ -224,6 +237,18 @@ export function LiveMap() {
               </button>
             );
           })}
+          <label className="ml-auto inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1 text-aiko-dark-600 dark:text-aiko-dark-300">
+            <input
+              type="checkbox"
+              checked={showOffline}
+              onChange={(event) => {
+                setShowOffline(event.target.checked);
+                if (!event.target.checked && statusFilter === 'OFFLINE') setStatusFilter('');
+              }}
+              className="h-4 w-4 accent-aiko-green-600"
+            />
+            Show offline riders{counts.offline ? ` (${counts.offline})` : ''}
+          </label>
           {counts.noLocation > 0 ? (
             <span className="rounded-full px-3 py-1 text-aiko-dark-500">
               {counts.noLocation} without a location yet
@@ -261,7 +286,9 @@ export function LiveMap() {
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value as LiveDriverStatus | '')}>
               <option value="">All statuses</option>
-              {(Object.keys(STATUS) as LiveDriverStatus[]).map((key) => (
+              {(Object.keys(STATUS) as LiveDriverStatus[])
+                .filter((key) => key !== 'OFFLINE' || showOffline)
+                .map((key) => (
                 <option key={key} value={key}>
                   {STATUS[key].label}
                 </option>
