@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Suspense, lazy } from 'react';
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { AppLayout } from '@/layout/AppLayout';
 import { AuditLogs } from '@/pages/AuditLogs';
@@ -18,6 +19,7 @@ import { UserDetail } from '@/pages/UserDetail';
 import { UserManagement } from '@/pages/UserManagement';
 import { Wallets } from '@/pages/Wallets';
 import { CustomToastContainer } from '@/components/CustomToastContainer';
+import { Spinner } from '@/components/ui';
 import { getToken } from '@/constants/api_management/MyHttpHelperWithToken';
 
 const queryClient = new QueryClient({
@@ -38,6 +40,8 @@ function RequireAuth() {
   return getToken() ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
+const LiveMap = lazy(() => import('@/pages/LiveMap').then((m) => ({ default: m.LiveMap })));
+
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -54,6 +58,14 @@ export function App() {
               <Route path="drivers" element={<Navigate to="/users?tab=drivers" replace />} />
               <Route path="drivers/:id" element={<DriverRedirect />} />
               <Route path="kyc" element={<KycApprovals />} />
+              <Route
+                path="live-map"
+                element={
+                  <Suspense fallback={<Spinner label="Loading map…" />}>
+                    <LiveMap />
+                  </Suspense>
+                }
+              />
               <Route path="users" element={<UserManagement />} />
               <Route path="users/:id" element={<UserDetail />} />
 

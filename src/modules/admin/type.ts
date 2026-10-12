@@ -62,3 +62,41 @@ export interface SocketActivity {
     offeredTo: number;
   }[];
 }
+
+export type LiveDriverStatus = 'AVAILABLE' | 'BUSY' | 'RESTRICTED' | 'DISCONNECTED';
+
+export interface LiveDriver {
+  driverId: string;
+  userId: string;
+  name: string | null;
+  phone: string | null;
+  photoUrl: string | null;
+  vehicleType: VehicleType;
+  vehiclePlate: string | null;
+  vehicleBrand: string | null;
+  vehicleModel: string | null;
+  rating: number;
+  heldOrders: number;
+  connected: boolean;
+  status: LiveDriverStatus;
+  position: {
+    lat: number;
+    lng: number;
+    heading: number | null;
+    recordedAt: string | null;
+    source: 'live' | 'last-known';
+  } | null;
+}
+
+export interface LiveDrivers {
+  generatedAt: string;
+  counts: {
+    online: number;
+    available: number;
+    busy: number;
+    restricted: number;
+    disconnected: number;
+    noLocation: number;
+  };
+  drivers: LiveDriver[];
+}

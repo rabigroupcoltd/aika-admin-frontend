@@ -1,4 +1,5 @@
 import {
+  MapPinned,
   BarChart3,
   CheckCircle2,
   FileText,
@@ -35,6 +36,7 @@ function sections(counts: { pendingKyc?: number; openTickets?: number }): NavSec
       items: [
         { to: '/', label: 'Dashboard', icon: LayoutDashboard },
         { to: '/orders', label: 'Orders', icon: Package },
+        { to: '/live-map', label: 'Live Map', icon: MapPinned, adminOnly: true },
         { to: '/kyc', label: 'KYC Approvals', icon: CheckCircle2, badge: counts.pendingKyc, adminOnly: true },
         { to: '/users', label: 'User Management', icon: Users },
       ],

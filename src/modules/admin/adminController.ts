@@ -5,6 +5,7 @@ import { parseApiError } from '@/utils/parseApiError';
 import type {
   ActivityItem,
   AdminSummary,
+  LiveDrivers,
   SocketActivity,
   TrendPoint,
   VehicleSplit,
@@ -27,6 +28,27 @@ export const useGetAdminSummaryManager = ({
     enabled,
     refetchInterval,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useGetLiveDriversManager = ({
+  enabled = true,
+  refetchInterval = 30_000,
+}: { enabled?: boolean; refetchInterval?: number } = {}) => {
+  return useQuery({
+    queryKey: ['admin', 'live-drivers'],
+    queryFn: async () => {
+      try {
+        const response = await AxiosWithToken.get<ApiResponse<LiveDrivers>>('/admin/live-drivers');
+        return response.data.data;
+      } catch (error) {
+        throw new Error(parseApiError(error));
+      }
+    },
+    enabled,
+    refetchInterval,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: true,
   });
 };
 
