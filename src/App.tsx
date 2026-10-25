@@ -5,6 +5,7 @@ import { AppLayout } from '@/layout/AppLayout';
 import { AuditLogs } from '@/pages/AuditLogs';
 import { Dashboard } from '@/pages/Dashboard';
 import { DispatchActivity } from '@/pages/DispatchActivity';
+import { DeletionRequests } from '@/pages/DeletionRequests';
 import { DriverRedirect } from '@/pages/DriverRedirect';
 import { Financials } from '@/pages/Financials';
 import { KycApprovals } from '@/pages/KycApprovals';
@@ -13,6 +14,7 @@ import { OrderDetail } from '@/pages/OrderDetail';
 import { Orders } from '@/pages/Orders';
 import { Pricing } from '@/pages/Pricing';
 import { PrivacyPolicy } from '@/pages/PrivacyPolicy';
+import { TermsOfService } from '@/pages/TermsOfService';
 import { Settings } from '@/pages/Settings';
 import { Support } from '@/pages/Support';
 import { SupportDetail } from '@/pages/SupportDetail';
@@ -50,6 +52,8 @@ export function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/terms-of-service" element={<Navigate to="/terms" replace />} />
           <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
 
           <Route element={<RequireAuth />}>
@@ -80,6 +84,7 @@ export function App() {
               <Route path="support/:id" element={<SupportDetail />} />
               <Route path="dispatch" element={<DispatchActivity />} />
               <Route path="audit" element={<AuditLogs />} />
+              <Route path="deletion-requests" element={<DeletionRequests />} />
               <Route path="settings" element={<Settings />} />
             </Route>
           </Route>

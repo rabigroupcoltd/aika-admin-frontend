@@ -1,4 +1,5 @@
 import {
+  UserX,
   MapPinned,
   BarChart3,
   CheckCircle2,
@@ -55,6 +56,7 @@ function sections(counts: { pendingKyc?: number; openTickets?: number }): NavSec
         { to: '/support', label: 'Support', icon: LifeBuoy, badge: counts.openTickets },
         { to: '/dispatch', label: 'Dispatch Activity', icon: RadioTower, adminOnly: true },
         { to: '/audit', label: 'Audit Logs', icon: FileText, adminOnly: true },
+        { to: '/deletion-requests', label: 'Deletion Requests', icon: UserX, adminOnly: true },
         { to: '/settings', label: 'Settings', icon: Settings, adminOnly: true },
       ],
     },
