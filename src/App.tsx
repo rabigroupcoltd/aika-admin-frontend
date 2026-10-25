@@ -12,6 +12,7 @@ import { Login } from '@/pages/Login';
 import { OrderDetail } from '@/pages/OrderDetail';
 import { Orders } from '@/pages/Orders';
 import { Pricing } from '@/pages/Pricing';
+import { PrivacyPolicy } from '@/pages/PrivacyPolicy';
 import { Settings } from '@/pages/Settings';
 import { Support } from '@/pages/Support';
 import { SupportDetail } from '@/pages/SupportDetail';
@@ -48,6 +49,8 @@ export function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
 
           <Route element={<RequireAuth />}>
             <Route element={<AppLayout />}>
