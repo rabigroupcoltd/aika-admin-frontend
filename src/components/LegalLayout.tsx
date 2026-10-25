@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const COMPANY_NAME = 'Nuriq Solutions';
 export const SUPPORT_EMAIL = 'rabigroupcoltd@gmail.com';
-export const DELETE_ACCOUNT_URL = 'https://aiko-api-uf0v.onrender.com/delete-account';
+export const DELETE_ACCOUNT_URL = 'https://aika-admin.onrender.com/delete-account';
 
 export type LegalSection = { id: string; title: string; body: ReactNode };
 

@@ -11,7 +11,7 @@ import {
 } from '@/modules/account/accountController';
 import { parseApiError } from '@/utils/parseApiError';
 
-const PUBLIC_PAGE = 'https://aiko-api-uf0v.onrender.com/delete-account';
+const PUBLIC_PAGE = 'https://aika-admin.onrender.com/delete-account';
 
 const TONE: Record<DeletionStatus, 'amber' | 'green' | 'neutral'> = {
   PENDING: 'amber',

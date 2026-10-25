@@ -13,6 +13,7 @@ import { Login } from '@/pages/Login';
 import { OrderDetail } from '@/pages/OrderDetail';
 import { Orders } from '@/pages/Orders';
 import { Pricing } from '@/pages/Pricing';
+import { DeleteAccount } from '@/pages/DeleteAccount';
 import { PrivacyPolicy } from '@/pages/PrivacyPolicy';
 import { TermsOfService } from '@/pages/TermsOfService';
 import { Settings } from '@/pages/Settings';
@@ -53,6 +54,7 @@ export function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/terms-of-service" element={<Navigate to="/terms" replace />} />
           <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
 
